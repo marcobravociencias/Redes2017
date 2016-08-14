@@ -8,14 +8,14 @@ from ScientificCalculator import scientific
 from archiva import archiva
 from UsuarioNuevoGUI import Nuevo
 
-noRegis = uic.loadUiType("noRegis.ui")[0]
+noRegis = uic.loadUiType("./GUI/noRegis.ui")[0]
 
 class Error(QtGui.QMainWindow, noRegis):
     def __init__(self, parent=None):
         QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self)
 
-main_class = uic.loadUiType("calculadora.ui")[0]
+main_class = uic.loadUiType("./GUI/calculadora.ui")[0]
 class VentanaCalculadora(QMainWindow,main_class):
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)
