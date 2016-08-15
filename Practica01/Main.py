@@ -1,8 +1,10 @@
 import sys
 from PyQt4 import QtCore, QtGui, uic
 from PyQt4.Qt import *
-sys.path.insert(0, 'Code/')
-sys.path.insert(1, 'GUI/')
+#sys.path.insert(0, 'Code/')
+#sys.path.insert(1, 'GUI/')
+sys.path.append('Code/')
+sys.path.append('GUI/')
 from ScientificCalculatorGUI import VentanaCalculadora
 from archiva import archiva
 
