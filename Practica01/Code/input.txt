@@ -3,3 +3,5 @@ username : marco password : rfwht
 username : anuar password : fszfw
 username : prueba password : uwzjgf
 username : agregado password : flwjlfit
+username : Admin password : firns
+username : Juan password : ozfs
