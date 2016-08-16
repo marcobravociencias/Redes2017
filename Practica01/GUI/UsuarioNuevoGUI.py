@@ -4,7 +4,7 @@ from PyQt4.Qt import *
 sys.path.insert(0, '../Code/')
 from archiva import archiva
 
-existe = uic.loadUiType("existe.ui")[0]
+existe = uic.loadUiType("./GUI/existe.ui")[0]
 
 class Error(QtGui.QMainWindow, existe):
     def __init__(self, parent=None):
@@ -14,7 +14,7 @@ class Error(QtGui.QMainWindow, existe):
 
     def salir(self):
         self.hide()
-exito = uic.loadUiType("exito.ui")[0]
+exito = uic.loadUiType("./GUI/exito.ui")[0]
 
 class Exito(QtGui.QMainWindow, exito):
     def __init__(self, parent=None):
@@ -24,7 +24,7 @@ class Exito(QtGui.QMainWindow, exito):
 
     def salir(self):
         self.hide()
-main_class = uic.loadUiType("agregaUsuario.ui")[0]
+main_class = uic.loadUiType("./GUI/agregaUsuario.ui")[0]
 class Nuevo(QMainWindow,main_class):
     def __init__(self, parent=None):
         QMainWindow.__init__(self, parent)

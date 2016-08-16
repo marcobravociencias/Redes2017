@@ -22,7 +22,7 @@ class archiva:
 		return lista
 
 	def login(self):
-		f = open('../Code/input.txt','r')#Ruta desde main por que lo usa desde ahi.
+		f = open('./Code/input.txt','r')#Ruta desde main por que lo usa desde ahi.
 		line = f.readline()
 		while line!='':
 			lista = self.arreglo(line) #Contrasena Usuario
@@ -37,7 +37,7 @@ class archiva:
 		return False
 
 	def busca(self):
-		f = open("../Code/input.txt")
+		f = open("./Code/input.txt")
 		line = f.readline()
 		while line!="":
 			lista = self.arreglo(line) #contra Usuario
@@ -50,7 +50,7 @@ class archiva:
 		return True
 
 	def agrega(self):
-		f = open('../Code/input.txt','a')
+		f = open('./Code/input.txt','a')
 		password = self.pas
 		linea = '\nusername : '+self.usr+' password : '+self.codifica(password)
 		f.write(linea)

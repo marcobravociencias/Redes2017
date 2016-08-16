@@ -1,12 +1,12 @@
 import sys
 from PyQt4 import QtCore, QtGui, uic
 from PyQt4.Qt import *
-sys.path.insert(0, 'Code/')
-sys.path.insert(1, 'GUI/')
+sys.path.insert(0, './Code/')
+sys.path.insert(1, './GUI/')
 from ScientificCalculatorGUI import VentanaCalculadora
 from archiva import archiva
 
-regisError = uic.loadUiType("regisError.ui")[0]
+regisError = uic.loadUiType("./GUI/regisError.ui")[0]
 
 class Error(QtGui.QMainWindow, regisError):
 	def __init__(self, parent=None):
@@ -17,7 +17,7 @@ class Error(QtGui.QMainWindow, regisError):
 	def salir(self):
 		self.hide()
 
-main_class = uic.loadUiType("login.ui")[0]
+main_class = uic.loadUiType("./GUI/login.ui")[0]
 class Ventana(QMainWindow,main_class):
 	def __init__(self, parent=None):
 		QMainWindow.__init__(self, parent)
