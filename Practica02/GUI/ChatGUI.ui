@@ -79,7 +79,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Conectado con : </string>
+     <string>Chat Ciencias - Redes de Computadoras - 2017-1</string>
     </property>
    </widget>
    <widget class="QTextEdit" name="text_send">

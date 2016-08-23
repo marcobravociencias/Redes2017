@@ -17,7 +17,7 @@ class Chat(QMainWindow,main_class):
 	************************************************** """
 	def getTexto(self): 	
 		msj = str(self.text_send.toPlainText())
-		self.text_send.clear()
+		self.text_send.clear()#LImpiamos el texto
 		return msj
 	""" **************************************************
 	Metodo que pone el texto en la interfaz del chat.
