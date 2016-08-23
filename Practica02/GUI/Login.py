@@ -30,9 +30,9 @@ class Ventana(QMainWindow,main_class):
 		usuario = str(self.text_usser.toPlainText())
 		ip1 = str(self.text_ip1.toPlainText())
 		ip2 = str(self.text_ip2.toPlainText())
-		usuario = 'Marco'
-		ip1 = 'localhost'
-		ip2 = 'localhost'
+		#usuario = 'Marco'
+		#ip1 = 'localhost'
+		#ip2 = 'localhost'
 		self.hiloSer = threading.Thread(target=self.IniciaServidor,args=(ip1,))
 		self.hiloSer.start()
 		self.hide()
