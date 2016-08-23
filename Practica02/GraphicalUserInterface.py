@@ -15,25 +15,20 @@
 # Distributed under terms of the MIT license.        #
 #################################################### #
 import sys, getopt
-
-
+sys.path.insert(0, './Channel')
+sys.path.insert(0, './GUI')
+#sys.path.insert(0, './Constants')
+from Login import *
+from ApiServer import *
+from ApiClient import * 
 
 # **************************************************
 #  Definicion de la funcion principal
 #**************************************************
-def main(argv):
-    try:
-        opts, args = getopt.getopt(argv, "l", ["local="])
-    except getopt.GetoptError:
-        #TODO lanzar exepcion
-    if opts: #Si el usuario mandó alguna bandera
-        local = True if '-l' in opts[0] else False
-    else:
-        local = False
-    app = QtGui.QApplication(sys.argv)
-    #TODO Llamar a su ventana de login
-    sys.exit(app.exec_())
+def main(args):
+    global app
+    app = App(args)
+    app.exec_()
 
-
-if __name__ == '__main__':
-    main(sys.argv[1:])
+if __name__ == "__main__":
+   main(sys.argv)
