@@ -3,7 +3,9 @@
 from ApiServer import MyApiServer
 from ApiClient import MyApiClient
 
+
 class Channel:
+
     """**************************************************
     Las instancias de esta clase contendran los metodos
     necesarios para hacer uso de los metodos
@@ -12,7 +14,7 @@ class Channel:
     servidor xmlrpc del contacto
     **************************************************"""
 
-    def __init__(self, contact_ip = None, contact_port = None):
+    def __init__(self, contact_ip=None, contact_port=None):
         """**************************************************
         Constructor de la clase
         @param <str> contact_ip: Si no se trabaja de manera local
@@ -23,7 +25,7 @@ class Channel:
         @param <int> contact_port: De trabajar de manera local
         representa el puerto de la instancia del contacto
         **************************************************"""
-        self.contact_ip =  contact_ip
+        self.contact_ip = contact_ip
         self.contact_port = contact_port
 
     def send_text(self, text):
