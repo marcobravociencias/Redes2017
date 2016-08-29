@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 import sys
 from PyQt4 import QtCore, QtGui, uic
 from PyQt4.Qt import *
@@ -17,7 +19,7 @@ class Chat(QMainWindow, main_class):
 
     def getTexto(self):
         """ **************************************************
-        Metodo que obtiene el texto de la casilla para escribir
+        Método que obtiene el texto de la casilla para escribir
         y lo regresa.
         ************************************************** """
         msj = str(self.text_send.toPlainText())
@@ -26,6 +28,6 @@ class Chat(QMainWindow, main_class):
 
     def setTexto(self, mensaje):
         """ **************************************************
-        Metodo que pone el texto en la interfaz del chat.
+        Método que pone el texto en la interfaz del chat.
         ************************************************** """
         self.text_receive.insertPlainText(mensaje)  # interfaz

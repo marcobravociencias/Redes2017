@@ -19,7 +19,7 @@ class FunctionWrapper:
 
     def sendMessage_wrapper(self, message):
         """ **************************************************
-        Procedimiento que ofrece nuestro servidor, este metodo sera llamado
+        Procedimiento que ofrece nuestro servidor, este método será llamado
         por el cliente con el que estamos hablando, debe de
         hacer lo necesario para mostrar el texto en nuestra pantalla.
         ************************************************** """
@@ -27,13 +27,13 @@ class FunctionWrapper:
 
     def ping(self):
         """ **************************************************
-        Metodo que nos indica si el servidor se encuentra en servicio.
+        Método que nos indica si el servidor se encuentra en servicio.
         ************************************************** """
         return True
 
     def vaciaBuffer(self):
         """ **************************************************
-        Metodo que nos deja vacio el buffer del servidor donde guarda
+        Método que nos deja vacío el buffer del servidor donde guarda
         los mensajes y lo regresa.
         ************************************************** """
         buffer = ''
@@ -45,7 +45,7 @@ class FunctionWrapper:
 
     def recibeAudio(self, audio):
         """ **************************************************
-        Metodo que recibe el audio del cliente con el que se conecta el chat.
+        Método que recibe el audio del cliente con el que se conecta el chat.
         ************************************************** """
         CHUNK = Constants.CHUNK
         CHANNELS = Constants.CHANNELS

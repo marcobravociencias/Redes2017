@@ -7,9 +7,9 @@ from ApiClient import MyApiClient
 class Channel:
 
     """**************************************************
-    Las instancias de esta clase contendran los metodos
-    necesarios para hacer uso de los metodos
-    del api de un contacto. Internamente Trabajara
+    Las instancias de esta clase contendrán los métodos
+    necesarios para hacer uso de los métodos
+    del API de un contacto. Internamente trabajará
     con una proxy apuntando hacia los servicios del
     servidor xmlrpc del contacto
     **************************************************"""
@@ -18,7 +18,7 @@ class Channel:
         """**************************************************
         Constructor de la clase
         @param <str> contact_ip: Si no se trabaja de manera local representa la
-            ip del contacto con el que se establecera la conexion
+            ip del contacto con el que se establecera la conexión
         @param <int> my_port: De trabajar de manera local puerto de la
             instancia del cliente
         @param <int> contact_port: De trabajar de manera local representa el
@@ -29,7 +29,7 @@ class Channel:
 
     def send_text(self, text):
         """**************************************************
-        Metodo que se encarga de mandar texto al contacto con
-        el cual se estableció la conexion
+        Método que se encarga de mandar texto al contacto con
+        el cual se estableció la conexión
         **************************************************"""
         pass

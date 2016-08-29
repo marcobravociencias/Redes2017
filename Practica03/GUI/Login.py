@@ -1,3 +1,5 @@
+#! /usr/bin/env python
+# -*- coding: utf-8 -*-
 import sys
 from PyQt4 import QtCore, QtGui, uic
 from PyQt4.Qt import *
@@ -13,7 +15,7 @@ import Constants
 class RequestHandler(SimpleXMLRPCRequestHandler):
 
     """ **************************************************
-    Clase que inicializa la ventana para la conexcion del chat y todos los servicios.
+    Clase que inicializa la ventana para la conexión del chat y todos los servicios.
     ************************************************** """
     rpc_paths = ('/RPC2',)
 
@@ -29,7 +31,7 @@ class Ventana(QMainWindow, main_class):
 
     def OK(self):
         """ **************************************************
-        Metodo que toma de la interfaz las ip's, y el nombre de usuario e inicializa
+        Método que toma de la interfaz las ip's, y el nombre de usuario e inicializa
         los servidores y la instancia del usuario.
         ************************************************** """
         usuario = str(self.text_usser.toPlainText())
@@ -48,7 +50,7 @@ class Ventana(QMainWindow, main_class):
 
     def IniciaServidor(self, ip1):
         """ **************************************************
-        Metodo que inicializa el servidor al cual le llegan los mensajes.
+        Método que inicializa el servidor al cual le llegan los mensajes.
         ************************************************** """
         server = SimpleXMLRPCServer(
             (ip1, int(Constants.PORT)), requestHandler=RequestHandler, allow_none=True)

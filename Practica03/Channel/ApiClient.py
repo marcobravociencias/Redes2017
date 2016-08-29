@@ -34,14 +34,14 @@ class MyApiClient():
         self.chat.boton_send.clicked.connect(self.enviar)
         self.hiloCliente = threading.Thread(target=self.escucha)
         self.hiloCliente.start()
-        # Conexcion de la interfaz con los eventos para iniciar y
+        # Conexión de la interfaz con los eventos para iniciar y
         # terminar la llamada
         self.chat.boton_llama.clicked.connect(self.iniciaLlamada)
         self.chat.boton_salir.clicked.connect(self.terminarLlamada)
 
     def escucha(self):
         """ **************************************************
-        Metodo que inicia un hilo para tener el servidor siempre activo y si
+        Método que inicia un hilo para tener el servidor siempre activo y si
         hay un mensaje en el buffer lo pasa a la interfaz.
         ************************************************** """
         while True:
@@ -55,7 +55,7 @@ class MyApiClient():
 
     def enviar(self):
         """ **************************************************
-        Metodo que envia un mensaje al servidor destino.
+        Método que envia un mensaje al servidor destino.
         ************************************************** """
         print 'Mando mensaje'
         if(self.server.ping()):
@@ -67,7 +67,7 @@ class MyApiClient():
 
     def iniciaLlamada(self):
         """ **************************************************
-        Metodo que inicia los hilos y llama a los metodos para la llamada.
+        Método que inicia los hilos y llama a los métodos para la llamada.
         ************************************************** """
         import multiprocessing
         self.stack = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
@@ -81,7 +81,7 @@ class MyApiClient():
 
     def reprodAudio(self):
         """ **************************************************
-        Metodo que reproduce el audio que va llegando del otro usuario.
+        Método que reproduce el audio que va llegando del otro usuario.
         ************************************************** """
         CHUNK = Constants.CHUNK
         WIDTH = Constants.WIDTH
@@ -105,7 +105,7 @@ class MyApiClient():
 
     def enviaAudio(self):
         """ **************************************************
-        Metodo que envia el audio al servidor destino.
+        Método que envía el audio al servidor destino.
         ************************************************** """
         while True:
             if self.hiloManda.isStopEx():
@@ -116,7 +116,7 @@ class MyApiClient():
 
     def terminarLlamada(self):
         """ **************************************************
-        Metodo que termina la llamada parando los hilos ejecucion.
+        Método que termina la llamada parando los hilos ejecución.
         ************************************************** """
         self.hiloEscucha.stopEx()
         self.hiloManda.stopEx()
