@@ -5,10 +5,11 @@ import threading
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 import xmlrpclib
-sys.path.insert(0, '../Channel')
+# sys.path.insert(0, '../Channel')
 from ApiServer import *
 from ApiClient import *
-
+sys.path.insert(0, 'Constants')
+import Constants
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
 
@@ -50,10 +51,10 @@ class Ventana(QMainWindow, main_class):
         Metodo que inicializa el servidor al cual le llegan los mensajes.
         ************************************************** """
         server = SimpleXMLRPCServer(
-            (ip1, 8000), requestHandler=RequestHandler, allow_none=True)
+            (ip1, int(Constants.PUERTO)), requestHandler=RequestHandler, allow_none=True)
         server.register_introspection_functions()
         server.register_instance(FunctionWrapper())
-        print "Listening on port 8000..."
+        print "Listening on port "+Constants.PUERTO+"..."
         try:
             server.serve_forever()
             print 'Use Control-C to exit'

@@ -8,13 +8,14 @@ from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 import threading
 import time
-sys.path.insert(0, '../GUI')
+sys.path.insert(0, 'GUI') # TODO check
 from Chat import *
 from ThreadEx import *
 import pyaudio
 import numpy
 from LlamaCurso import *
-
+sys.path.insert(0, 'Constants')
+import Constants
 
 class MyApiClient():
 
@@ -27,7 +28,7 @@ class MyApiClient():
         self.ip1 = ip1
         self.ip2 = ip2
         self.server = xmlrpclib.ServerProxy(
-            "http://"+self.ip2+":8000", allow_none=True)
+            "http://"+self.ip2+":"+Constants.PUERTO, allow_none=True)
         self.tem = threading.Event()
         self.chat = Chat(self.tem)
         self.chat.show()
@@ -47,7 +48,7 @@ class MyApiClient():
         while True:
             time.sleep(1)
             serverCli = xmlrpclib.ServerProxy(
-                "http://"+self.ip1+":8000", allow_none=True)
+                "http://"+self.ip1+":"+Constants.PUERTO, allow_none=True)
             msj = serverCli.vaciaBuffer()
             if(len(msj) != 0):
                 self.chat.setTexto(msj)

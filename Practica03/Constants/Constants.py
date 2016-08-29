@@ -1,4 +1,4 @@
 #! /usr/bin/env python
+# -*- coding: utf-8 -*-
 
-#TODO
-
+PUERTO = "5000" # Puerto donde se establece la comunicación
