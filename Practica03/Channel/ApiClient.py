@@ -8,13 +8,11 @@ from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 import threading
 import time
-sys.path.insert(0, 'GUI') # TODO check
 from Chat import *
 from ThreadEx import *
 import pyaudio
 import numpy
 from LlamaCurso import *
-sys.path.insert(0, 'Constants')
 import Constants
 
 class MyApiClient():
@@ -71,7 +69,7 @@ class MyApiClient():
         Metodo que inicia los hilos y llama a los metodos para la llamada.
         ************************************************** """
         import multiprocessing
-        self.stack = multiprocessing.Queue(10000)
+        self.stack = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
         self.hiloManda = ThreadEx(targetp=self.enviaAudio, namep='hiloManda')
         self.hiloManda.start()
         self.hiloEscucha = ThreadEx(
@@ -84,10 +82,10 @@ class MyApiClient():
         """ **************************************************
         Metodo que reproduce el audio que va llegando del otro usuario.
         ************************************************** """
-        CHUNK = 1024
-        WIDTH = 2
-        CHANNELS = 2
-        RATE = 44100
+        CHUNK = Constants.CHUNK
+        WIDTH = Constants.WIDTH
+        CHANNELS = Constants.CHANNELS
+        RATE = Constants.RATE
         p = pyaudio.PyAudio()
         FORMAT = p.get_format_from_width(WIDTH)
         stream = p.open(format=FORMAT, channels=CHANNELS,
@@ -95,7 +93,7 @@ class MyApiClient():
         while True:
             if self.hiloManda.isStopEx():
                 return 1
-            n = 50
+            n = Constants.CHUNKS_BUFFER
             frame = []
             for i in range(0, n):
                 frame.append(stream.read(CHUNK))
