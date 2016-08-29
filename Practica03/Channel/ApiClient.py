@@ -28,7 +28,7 @@ class MyApiClient():
         self.ip1 = ip1
         self.ip2 = ip2
         self.server = xmlrpclib.ServerProxy(
-            "http://"+self.ip2+":"+Constants.PUERTO, allow_none=True)
+            "http://"+self.ip2+":"+Constants.PORT, allow_none=True)
         self.tem = threading.Event()
         self.chat = Chat(self.tem)
         self.chat.show()
@@ -46,9 +46,9 @@ class MyApiClient():
         hay un mensaje en el buffer lo pasa a la interfaz.
         ************************************************** """
         while True:
-            time.sleep(1)
+            time.sleep(Constants.SLEEP)
             serverCli = xmlrpclib.ServerProxy(
-                "http://"+self.ip1+":"+Constants.PUERTO, allow_none=True)
+                "http://"+self.ip1+":"+Constants.PORT, allow_none=True)
             msj = serverCli.vaciaBuffer()
             if(len(msj) != 0):
                 self.chat.setTexto(msj)

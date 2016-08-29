@@ -18,7 +18,7 @@ import sys
 import getopt
 sys.path.insert(0, './Channel')
 sys.path.insert(0, './GUI')
-#sys.path.insert(0, './Constants')
+sys.path.insert(0, './Constants')
 from Login import *
 from ApiServer import *
 from ApiClient import *
