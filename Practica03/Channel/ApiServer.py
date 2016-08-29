@@ -4,6 +4,7 @@ from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 import sys
 import pyaudio
+import Constants
 
 # class MyApiServer():
 #    def __init__(self, my_port = None):
@@ -46,13 +47,13 @@ class FunctionWrapper:
         """ **************************************************
         Metodo que recibe el audio del cliente con el que se conecta el chat.
         ************************************************** """
-        CHUNK = 1024
-        CHANNELS = 2
-        RATE = 44100
-        RECORD_SECONDS = 5
-        DELAY_SIZE = RECORD_SECONDS * RATE / (1000 * CHUNK)
+        CHUNK = Constants.CHUNK
+        CHANNELS = Constants.CHANNELS
+        RATE = Constants.RATE
+        RECORD_SECONDS = Constants.RECORD_SECONDS
+        DELAY_SIZE = Constants.DELAY_SIZE
         p = pyaudio.PyAudio()
-        FORMAT = p.get_format_from_width(2)
+        FORMAT = p.get_format_from_width(Constants.CHANNELS)
         stream = p.open(format=FORMAT,
                         channels=CHANNELS,
                         rate=RATE,
