@@ -14,21 +14,23 @@
 #                                                    #
 # Distributed under terms of the MIT license.        #
 #################################################### #
-import sys, getopt
+import sys
+import getopt
 sys.path.insert(0, './Channel')
 sys.path.insert(0, './GUI')
 #sys.path.insert(0, './Constants')
 from Login import *
 from ApiServer import *
-from ApiClient import * 
+from ApiClient import *
 
-# **************************************************
-#  Definicion de la funcion principal
-#**************************************************
+
 def main(args):
+    # **************************************************
+    #  Definicion de la funcion principal
+    #**************************************************
     global app
     app = App(args)
     app.exec_()
 
 if __name__ == "__main__":
-   main(sys.argv)
+    main(sys.argv)

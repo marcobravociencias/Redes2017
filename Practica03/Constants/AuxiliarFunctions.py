@@ -16,24 +16,25 @@
 #####################################################
 import socket
 
-"""**************************************************
- Metodo auxiliar que hace uso de internet para
- conocer la ip con la que contamos como usuarios
-**************************************************"""
 
 def get_ip_address():
+    """**************************************************
+    Metodo auxiliar que hace uso de internet para
+    conocer la ip con la que contamos como usuarios
+    **************************************************"""
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
-    return "%s"% (s.getsockname()[0])
+    return "%s" % (s.getsockname()[0])
 
-"""**************************************************
- Clase auxiliar que implementa el metodo
-stop, para que el hilo se detenga externamente
-**************************************************"""
 import threading
 
 
 class MyThread(threading.Thread):
+
+    """**************************************************
+    Clase auxiliar que implementa el metodo stop, para que el hilo se detenga
+    externamente
+    **************************************************"""
 
     def __init__(self, target):
         super(MyThread, self).__init__(target=target)
