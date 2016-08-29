@@ -13,6 +13,7 @@ from Chat import *
 from ThreadEx import *
 import pyaudio
 import numpy
+from LlamaCurso import *
 """ **************************************************
 Clase cliente del chat.
 ************************************************** """
@@ -33,6 +34,7 @@ class MyApiClient():
 		#terminar la llamada 
 		self.chat.boton_llama.clicked.connect(self.iniciaLlamada)
 		self.chat.boton_salir.clicked.connect(self.terminarLlamada)
+		
 
 		
 
@@ -72,6 +74,8 @@ class MyApiClient():
 		self.hiloManda.start()
 		self.hiloEscucha = ThreadEx(targetp=self.reprodAudio,namep='hiloEscucha')
 		self.hiloEscucha.start()
+		self.llama = LlamadaCurso(self.hiloManda)
+		self.llama.show()
 		
 	""" **************************************************
     Metodo que reproduce el audio que va llegando del otro
@@ -118,3 +122,4 @@ class MyApiClient():
 	def terminarLlamada(self):
 		self.hiloEscucha.stopEx()
 		self.hiloManda.stopEx()
+		self.llama.hide()
