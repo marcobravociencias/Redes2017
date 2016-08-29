@@ -15,6 +15,7 @@ import numpy
 from LlamaCurso import *
 import Constants
 
+
 class MyApiClient():
 
     """ **************************************************
