@@ -36,21 +36,23 @@ class Ventana(QMainWindow, main_class):
         usuario = str(self.text_usser.toPlainText())
         ip1 = str(self.text_ip1.toPlainText())
         ip2 = str(self.text_ip2.toPlainText())
+        puerto1 = str(self.text_puerto.toPlainText())
+        puerto2 = str(self.text_puerto_2.toPlainText())
         self.hiloSer = threading.Thread(
-            target=self.IniciaServidor, args=(ip1,))
+            target=self.IniciaServidor, args=(ip1,puerto1,))
         self.hiloSer.start()
         self.hide()
-        self.client = MyApiClient(usuario, ip1, ip2)
+        self.client = MyApiClient(usuario, ip1, ip2, puerto1, puerto2)
 
-    def IniciaServidor(self, ip1):
+    def IniciaServidor(self, ip1, puertoProp):
         """ **************************************************
         Metodo que inicializa el servidor al cual le llegan los mensajes.
         ************************************************** """
         server = SimpleXMLRPCServer(
-            (ip1, 8000), requestHandler=RequestHandler, allow_none=True)
+            (ip1, int(puertoProp)), requestHandler=RequestHandler, allow_none=True)
         server.register_introspection_functions()
         server.register_instance(FunctionWrapper())
-        print "Listening on port 8000..."
+        print "Listening on port "+puertoProp+"..."
         try:
             server.serve_forever()
             print 'Use Control-C to exit'

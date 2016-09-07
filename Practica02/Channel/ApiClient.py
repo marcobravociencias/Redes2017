@@ -18,12 +18,14 @@ class MyApiClient():
     Clase cliente del chat.
     ************************************************** """
 
-    def __init__(self, usr, ip1, ip2):
+    def __init__(self, usr, ip1, ip2, puertoProp, puertoDest):
         self.usr = usr
         self.ip1 = ip1
         self.ip2 = ip2
+        self.puertoProp = puertoProp
+        self.puertoDest = puertoDest
         self.server = xmlrpclib.ServerProxy(
-            "http://"+self.ip2+":8000", allow_none=True)
+            "http://"+self.ip2+":"+self.puertoDest, allow_none=True)
         self.tem = threading.Event()
         self.chat = Chat(self.tem)
         self.chat.show()
@@ -39,7 +41,7 @@ class MyApiClient():
         while True:
             time.sleep(1)
             serverCli = xmlrpclib.ServerProxy(
-                "http://"+self.ip1+":8000", allow_none=True)
+                "http://"+self.ip1+":"+self.puertoProp, allow_none=True)
             msj = serverCli.vaciaBuffer()
             if(len(msj) != 0):
                 self.chat.setTexto(msj)

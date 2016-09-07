@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>460</width>
-    <height>274</height>
+    <width>479</width>
+    <height>307</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,7 +18,7 @@
     <property name="geometry">
      <rect>
       <x>160</x>
-      <y>180</y>
+      <y>220</y>
       <width>141</width>
       <height>27</height>
      </rect>
@@ -49,7 +49,7 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>60</y>
+      <y>70</y>
       <width>52</width>
       <height>15</height>
      </rect>
@@ -62,7 +62,7 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>90</y>
+      <y>100</y>
       <width>52</width>
       <height>15</height>
      </rect>
@@ -75,7 +75,7 @@
     <property name="geometry">
      <rect>
       <x>210</x>
-      <y>60</y>
+      <y>70</y>
       <width>141</width>
       <height>21</height>
      </rect>
@@ -85,7 +85,7 @@
     <property name="geometry">
      <rect>
       <x>210</x>
-      <y>90</y>
+      <y>100</y>
       <width>141</width>
       <height>21</height>
      </rect>
@@ -95,7 +95,7 @@
     <property name="geometry">
      <rect>
       <x>210</x>
-      <y>120</y>
+      <y>130</y>
       <width>141</width>
       <height>21</height>
      </rect>
@@ -105,7 +105,7 @@
     <property name="geometry">
      <rect>
       <x>111</x>
-      <y>120</y>
+      <y>130</y>
       <width>71</width>
       <height>20</height>
      </rect>
@@ -114,13 +114,72 @@
      <string>IP conectar:</string>
     </property>
    </widget>
+   <widget class="QLabel" name="tex_puerto">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>160</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Puerto propio:</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="text_puerto">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>160</y>
+      <width>141</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="tex_puerto_2">
+    <property name="geometry">
+     <rect>
+      <x>110</x>
+      <y>190</y>
+      <width>91</width>
+      <height>20</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Puerto conectar:</string>
+    </property>
+   </widget>
+   <widget class="QTextEdit" name="text_puerto_2">
+    <property name="geometry">
+     <rect>
+      <x>210</x>
+      <y>190</y>
+      <width>141</width>
+      <height>21</height>
+     </rect>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>40</y>
+      <width>341</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Para conexión local poner en las ip's &quot;localhost&quot; y el puerto.</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>460</width>
+     <width>479</width>
      <height>23</height>
     </rect>
    </property>
