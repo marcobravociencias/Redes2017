@@ -5,6 +5,9 @@ from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 import sys
 import pyaudio
 import Constants
+import cv2
+import numpy
+import threading
 
 # class MyApiServer():
 #    def __init__(self, my_port = None):
@@ -16,6 +19,10 @@ class FunctionWrapper:
     def __init__(self):
         self.buffer = list()
         self.stream = None
+        self.frames = []
+        self.hiloReproduceVideo = threading.Thread(target=self.reproduceVideo)
+        self.hiloReproduceVideo.setDaemon(True)
+        self.hiloReproduceVideo.start()
 
     def sendMessage_wrapper(self, message):
         """ **************************************************
@@ -63,3 +70,14 @@ class FunctionWrapper:
         stream.write(data)
         stream.close()
         p.terminate()
+
+    def recibeVideo(self, video):
+        self.frames.append(toArray(video.data))
+
+    def reproduceVideo(self):
+        while True:
+            if len(self.frames) > 0:
+                cv2.imshow('Servidor',self.frames.pop(0))
+                if cv2.waitKey(1) & 0xFF==ord('q'):
+                    break
+        cv2.destroyAllWindows()

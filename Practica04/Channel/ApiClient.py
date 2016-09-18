@@ -14,6 +14,9 @@ import pyaudio
 import numpy
 from LlamaCurso import *
 import Constants
+import cv2
+import multiprocessing
+from numpy.lib import format
 
 
 class MyApiClient():
@@ -69,13 +72,16 @@ class MyApiClient():
         """ **************************************************
         Método que inicia los hilos y llama a los métodos para la llamada.
         ************************************************** """
-        import multiprocessing
         self.stack = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
         self.hiloManda = ThreadEx(targetp=self.enviaAudio, namep='hiloManda')
         self.hiloManda.start()
         self.hiloEscucha = ThreadEx(
             targetp=self.reprodAudio, namep='hiloEscucha')
         self.hiloEscucha.start()
+        # video
+        # self.stackVideo = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
+        # self.hiloMandaVideo = multiprocessing.Process(target=self.enviaVideo, args=())
+        # self.hiloMandaVideo.start()
         self.llama = LlamadaCurso(self.hiloManda)
         self.llama.show()
 
@@ -113,6 +119,31 @@ class MyApiClient():
             d = self.stack.get()
             data = xmlrpclib.Binary(d)
             self.server.recibeAudio(data)
+
+    def reprodVideo(self):
+        """ **************************************************
+        Método que reproduce el audio que va llegando del otro usuario.
+        ************************************************** """
+
+    def toString(data):
+        f= StringIO()
+        format.write_array(f,data)
+        return f.getvalue()
+
+    def enviaVideo(self):
+        """ **************************************************
+        Método que envía el audio al servidor destino.
+        ************************************************** """
+        cap = cv2.VideoCapture(0)
+        while True:
+            ret, frame = cap.read()
+            cv2.imshow('Cliente',frame) 
+            if cv2.waitKey(1) & 0xFF == ord('q'):
+                break
+            data = xmlrpclib.Binary(toString(frame))
+            self.server.recibeVideo(data) 
+        cap.release()
+        cv2.destroyAllWindows()
 
     def terminarLlamada(self):
         """ **************************************************
