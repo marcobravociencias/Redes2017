@@ -8,6 +8,8 @@ import Constants
 import cv2
 import numpy
 import threading
+from cStringIO import StringIO
+from numpy.lib import format
 
 # class MyApiServer():
 #    def __init__(self, my_port = None):
@@ -71,9 +73,14 @@ class FunctionWrapper:
         stream.close()
         p.terminate()
 
+    def toArray(self, s):
+        f=StringIO(s)
+        arr=format.read_array(f)
+        return arr 
+
     def recibeVideo(self, video):
-        print 's: recibo frame'
-        self.frames.append(toArray(video.data))
+        # print 's: recibo frame'
+        self.frames.append(self.toArray(video.data))
         cv2.imshow('Servidor',self.frames.pop(0))
         # if len(self.frames) > 0:
         #     cv2.imshow('Servidor',self.frames.pop(0))

@@ -17,6 +17,7 @@ import Constants
 import cv2
 import multiprocessing
 from numpy.lib import format
+from cStringIO import StringIO
 
 
 class MyApiClient():
@@ -125,7 +126,7 @@ class MyApiClient():
         Método que reproduce el video que va llegando del otro usuario.
         ************************************************** """
 
-    def toString(data):
+    def toString(self, data):
         f= StringIO()
         format.write_array(f,data)
         return f.getvalue()
@@ -138,12 +139,12 @@ class MyApiClient():
         # cap = cv2.VideoCapture('TameImpalaYesImChanging.avi')
         cap = cv2.VideoCapture(0)
         while True:
-            print 'c: captura'
+            # print 'c: captura'
             ret, frame = cap.read()
             cv2.imshow('Cliente',frame) 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
-            data = xmlrpclib.Binary(toString(frame))
+            #if cv2.waitKey(1) & 0xFF == ord('q'):
+            #    break
+            data = xmlrpclib.Binary(self.toString(frame))
             self.server.recibeVideo(data) 
         cap.release()
         cv2.destroyAllWindows()
