@@ -81,7 +81,7 @@ class FunctionWrapper:
     def recibeVideo(self, video):
         # print 's: recibo frame'
         self.frames.append(self.toArray(video.data))
-        cv2.imshow('Servidor',self.frames.pop(0))
+        # cv2.imshow('Servidor',self.frames.pop(0))
         # if len(self.frames) > 0:
         #     cv2.imshow('Servidor',self.frames.pop(0))
         # cv2.destroyAllWindows()

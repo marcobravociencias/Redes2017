@@ -127,8 +127,8 @@ class MyApiClient():
         ************************************************** """
 
     def toString(self, data):
-        f= StringIO()
-        format.write_array(f,data)
+        f = StringIO()
+        format.write_array(f, data)
         return f.getvalue()
 
     def enviaVideo(self):
@@ -141,11 +141,15 @@ class MyApiClient():
         while True:
             # print 'c: captura'
             ret, frame = cap.read()
-            cv2.imshow('Cliente',frame) 
-            #if cv2.waitKey(1) & 0xFF == ord('q'):
-            #    break
-            data = xmlrpclib.Binary(self.toString(frame))
-            self.server.recibeVideo(data) 
+            if(ret):
+                cv2.imshow('Cliente', frame)
+                # if cv2.waitKey(1) & 0xFF == ord('q'):
+                #    break
+                data = xmlrpclib.Binary(self.toString(frame))
+                self.server.recibeVideo(data)
+            else:
+                print 'error cap.read'
+                break
         cap.release()
         cv2.destroyAllWindows()
 
