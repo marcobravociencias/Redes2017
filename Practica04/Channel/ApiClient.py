@@ -73,15 +73,15 @@ class MyApiClient():
         """ **************************************************
         Método que inicia los hilos y llama a los métodos para la llamada.
         ************************************************** """
-        # self.stack = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
-        # self.hiloManda = ThreadEx(targetp=self.enviaAudio, namep='hiloManda')
-        # self.hiloManda.start()
-        # self.hiloEscucha = ThreadEx(targetp=self.reprodAudio, namep='hiloEscucha')
-        # self.hiloEscucha.start()
+        self.stack = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
+        self.hiloManda = ThreadEx(targetp=self.enviaAudio, namep='hiloManda')
+        self.hiloManda.start()
+        self.hiloEscucha = ThreadEx(targetp=self.reprodAudio, namep='hiloEscucha')
+        self.hiloEscucha.start()
         # video
-        self.stackVideo = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
-        self.hiloMandaVideo = ThreadEx(targetp=self.enviaVideo, namep='hiloMandaVideo')
-        self.hiloMandaVideo.start()
+        # self.stackVideo = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
+        # self.hiloMandaVideo = ThreadEx(targetp=self.enviaVideo, namep='hiloMandaVideo')
+        # self.hiloMandaVideo.start()
         # self.llama = LlamadaCurso(self.hiloManda)
         self.llama = LlamadaCurso(None)
         self.llama.show()

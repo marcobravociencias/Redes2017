@@ -20,11 +20,14 @@ class FunctionWrapper:
 
     def __init__(self):
         self.buffer = list()
-        self.stream = None
+        self.stream = []
         self.frames = []
         self.hiloReproduceVideo = threading.Thread(target=self.reproduceVideo)
         self.hiloReproduceVideo.setDaemon(True)
         self.hiloReproduceVideo.start()
+        self.hiloReproduceAudio = threading.Thread(target=self.reproduceAudio)
+        self.hiloReproduceAudio.setDaemon(True)
+        self.hiloReproduceAudio.start()
 
     def sendMessage_wrapper(self, message):
         """ **************************************************
@@ -56,27 +59,12 @@ class FunctionWrapper:
         """ **************************************************
         Método que recibe el audio del cliente con el que se conecta el chat.
         ************************************************** """
-        CHUNK = Constants.CHUNK
-        CHANNELS = Constants.CHANNELS
-        RATE = Constants.RATE
-        RECORD_SECONDS = Constants.RECORD_SECONDS
-        DELAY_SIZE = Constants.DELAY_SIZE
-        p = pyaudio.PyAudio()
-        FORMAT = p.get_format_from_width(Constants.CHANNELS)
-        stream = p.open(format=FORMAT,
-                        channels=CHANNELS,
-                        rate=RATE,
-                        output=True,
-                        frames_per_buffer=CHUNK)
-        data = audio.data
-        stream.write(data)
-        stream.close()
-        p.terminate()
+        self.stream.append(audio.data)
 
     def toArray(self, s):
-        f=StringIO(s)
-        arr=format.read_array(f)
-        return arr 
+        f = StringIO(s)
+        arr = format.read_array(f)
+        return arr
 
     def recibeVideo(self, video):
         # print 's: recibo frame'
@@ -86,10 +74,26 @@ class FunctionWrapper:
         #     cv2.imshow('Servidor',self.frames.pop(0))
         # cv2.destroyAllWindows()
 
+    def reproduceAudio(self):
+        CHUNK = Constants.CHUNK
+        CHANNELS = Constants.CHANNELS
+        RATE = Constants.RATE
+        RECORD_SECONDS = Constants.RECORD_SECONDS
+        DELAY_SIZE = Constants.DELAY_SIZE
+        p = pyaudio.PyAudio()
+        FORMAT = p.get_format_from_width(Constants.CHANNELS)
+        while True:
+            stream = p.open(format=FORMAT, channels=CHANNELS, rate=RATE, output=True, frames_per_buffer=CHUNK)
+            if len(self.stream) > 0:
+                data = self.stream.pop(0)
+                stream.write(data)
+            stream.close()
+        p.terminate()
+
     def reproduceVideo(self):
         while True:
             if len(self.frames) > 0:
-                cv2.imshow('Servidor',self.frames.pop(0))
+                cv2.imshow('Servidor', self.frames.pop(0))
                 # if cv2.waitKey(1) & 0xFF==ord('q'):
                 #     break
         cv2.destroyAllWindows()
