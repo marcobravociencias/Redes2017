@@ -72,17 +72,17 @@ class MyApiClient():
         """ **************************************************
         Método que inicia los hilos y llama a los métodos para la llamada.
         ************************************************** """
-        self.stack = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
-        self.hiloManda = ThreadEx(targetp=self.enviaAudio, namep='hiloManda')
-        self.hiloManda.start()
-        self.hiloEscucha = ThreadEx(
-            targetp=self.reprodAudio, namep='hiloEscucha')
-        self.hiloEscucha.start()
+        # self.stack = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
+        # self.hiloManda = ThreadEx(targetp=self.enviaAudio, namep='hiloManda')
+        # self.hiloManda.start()
+        # self.hiloEscucha = ThreadEx(targetp=self.reprodAudio, namep='hiloEscucha')
+        # self.hiloEscucha.start()
         # video
-        # self.stackVideo = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
-        # self.hiloMandaVideo = multiprocessing.Process(target=self.enviaVideo, args=())
-        # self.hiloMandaVideo.start()
-        self.llama = LlamadaCurso(self.hiloManda)
+        self.stackVideo = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
+        self.hiloMandaVideo = ThreadEx(targetp=self.enviaVideo, namep='hiloMandaVideo')
+        self.hiloMandaVideo.start()
+        # self.llama = LlamadaCurso(self.hiloManda)
+        self.llama = LlamadaCurso(None)
         self.llama.show()
 
     def reprodAudio(self):
@@ -122,7 +122,7 @@ class MyApiClient():
 
     def reprodVideo(self):
         """ **************************************************
-        Método que reproduce el audio que va llegando del otro usuario.
+        Método que reproduce el video que va llegando del otro usuario.
         ************************************************** """
 
     def toString(data):
@@ -132,10 +132,13 @@ class MyApiClient():
 
     def enviaVideo(self):
         """ **************************************************
-        Método que envía el audio al servidor destino.
+        Método que envía el video al servidor destino.
         ************************************************** """
+        # while cap.isOpened():
+        # cap = cv2.VideoCapture('TameImpalaYesImChanging.avi')
         cap = cv2.VideoCapture(0)
         while True:
+            print 'c: captura'
             ret, frame = cap.read()
             cv2.imshow('Cliente',frame) 
             if cv2.waitKey(1) & 0xFF == ord('q'):
