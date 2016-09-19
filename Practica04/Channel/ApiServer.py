@@ -22,9 +22,9 @@ class FunctionWrapper:
         self.buffer = list()
         self.stream = None
         self.frames = []
-        # self.hiloReproduceVideo = threading.Thread(target=self.reproduceVideo)
-        # self.hiloReproduceVideo.setDaemon(True)
-        # self.hiloReproduceVideo.start()
+        self.hiloReproduceVideo = threading.Thread(target=self.reproduceVideo)
+        self.hiloReproduceVideo.setDaemon(True)
+        self.hiloReproduceVideo.start()
 
     def sendMessage_wrapper(self, message):
         """ **************************************************
@@ -85,3 +85,11 @@ class FunctionWrapper:
         # if len(self.frames) > 0:
         #     cv2.imshow('Servidor',self.frames.pop(0))
         # cv2.destroyAllWindows()
+
+    def reproduceVideo(self):
+        while True:
+            if len(self.frames) > 0:
+                cv2.imshow('Servidor',self.frames.pop(0))
+                # if cv2.waitKey(1) & 0xFF==ord('q'):
+                #     break
+        cv2.destroyAllWindows()

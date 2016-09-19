@@ -135,10 +135,10 @@ class MyApiClient():
         """ **************************************************
         Método que envía el video al servidor destino.
         ************************************************** """
-        # while cap.isOpened():
-        # cap = cv2.VideoCapture('TameImpalaYesImChanging.avi')
+        # cap = cv2.VideoCapture('TameImpalaYesImChanging_720.avi')
         cap = cv2.VideoCapture(0)
-        while True:
+        while cap.isOpened():
+        # while True:
             # print 'c: captura'
             ret, frame = cap.read()
             if(ret):
