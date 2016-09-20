@@ -75,14 +75,13 @@ class MyApiClient():
         ************************************************** """
         self.stack = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
         self.hiloManda = ThreadEx(targetp=self.enviaAudio, namep='hiloManda')
-        self.hiloManda.start()
+        # self.hiloManda.start()
         self.hiloEscucha = ThreadEx(targetp=self.reprodAudio, namep='hiloEscucha')
-        self.hiloEscucha.start()
+        # self.hiloEscucha.start()
         # video
-        # self.stackVideo = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
-        # self.hiloMandaVideo = ThreadEx(targetp=self.enviaVideo, namep='hiloMandaVideo')
-        # self.hiloMandaVideo.start()
-        # self.llama = LlamadaCurso(self.hiloManda)
+        self.stackVideo = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
+        self.hiloMandaVideo = ThreadEx(targetp=self.enviaVideo, namep='hiloMandaVideo')
+        self.hiloMandaVideo.start()
         self.llama = LlamadaCurso(None)
         self.llama.show()
 
@@ -157,6 +156,7 @@ class MyApiClient():
         """ **************************************************
         Método que termina la llamada parando los hilos ejecución.
         ************************************************** """
-        self.hiloEscucha.stopEx()
-        self.hiloManda.stopEx()
+        # self.hiloEscucha.stopEx()
+        # self.hiloManda.stopEx()
+        self.hiloMandaVideo()
         self.llama.hide()
