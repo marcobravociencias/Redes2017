@@ -24,10 +24,10 @@ class FunctionWrapper:
         self.frames = []
         self.hiloReproduceVideo = threading.Thread(target=self.reproduceVideo)
         self.hiloReproduceVideo.setDaemon(True)
-        self.hiloReproduceVideo.start()
+        # self.hiloReproduceVideo.start()
         self.hiloReproduceAudio = threading.Thread(target=self.reproduceAudio)
         self.hiloReproduceAudio.setDaemon(True)
-        self.hiloReproduceAudio.start()
+        # self.hiloReproduceAudio.start()
 
     def sendMessage_wrapper(self, message):
         """ **************************************************
@@ -69,7 +69,7 @@ class FunctionWrapper:
     def recibeVideo(self, video):
         # print 's: recibo frame'
         self.frames.append(self.toArray(video.data))
-        # cv2.imshow('Servidor',self.frames.pop(0))
+        cv2.imshow('Servidor',self.frames.pop(0))
         # if len(self.frames) > 0:
         #     cv2.imshow('Servidor',self.frames.pop(0))
         # cv2.destroyAllWindows()

@@ -80,6 +80,8 @@ class MyApiClient():
         # self.hiloEscucha.start()
         # video
         self.stackVideo = multiprocessing.Queue(Constants.QUEUE_MAX_SIZE)
+        self.hiloCapturaVideo = ThreadEx(targetp=self.capturaVideo, namep='hiloCapturaVideo')
+        self.hiloCapturaVideo.start()
         self.hiloMandaVideo = ThreadEx(targetp=self.enviaVideo, namep='hiloMandaVideo')
         self.hiloMandaVideo.start()
         self.llama = LlamadaCurso(None)
@@ -120,37 +122,37 @@ class MyApiClient():
             data = xmlrpclib.Binary(d)
             self.server.recibeAudio(data)
 
-    def reprodVideo(self):
-        """ **************************************************
-        Método que reproduce el video que va llegando del otro usuario.
-        ************************************************** """
-
     def toString(self, data):
         f = StringIO()
         format.write_array(f, data)
         return f.getvalue()
-
-    def enviaVideo(self):
-        """ **************************************************
-        Método que envía el video al servidor destino.
-        ************************************************** """
+    
+    def capturaVideo(self):
         # cap = cv2.VideoCapture('TameImpalaYesImChanging_720.avi')
         cap = cv2.VideoCapture(0)
         while cap.isOpened():
-        # while True:
-            # print 'c: captura'
-            ret, frame = cap.read()
-            if(ret):
-                cv2.imshow('Cliente', frame)
-                # if cv2.waitKey(1) & 0xFF == ord('q'):
-                #    break
-                data = xmlrpclib.Binary(self.toString(frame))
-                self.server.recibeVideo(data)
-            else:
-                print 'error cap.read'
-                break
-        cap.release()
-        cv2.destroyAllWindows()
+            n = 30
+            frame1 = []
+            for i in range (0,n):
+                ret, frame = cap.read()
+                if(ret):
+                    cv2.imshow('Cliente', frame)
+                    data = xmlrpclib.Binary(self.toString(frame))
+                    self.stackVideo.put(data)
+
+    def enviaVideo(self):
+        while True:
+            if not self.stackVideo.empty():
+                d1 = self.stackVideo.get()
+                # datita2 = xmlrpclib.Binary(d1)
+                self.server.recibe_video(dl)
+    
+    def transmite_llamada(self):
+        while True:
+            if not self.stackVideo.empty():
+                d1 = self.stackVideo.get()
+                # datita2 = xmlrpclib.Binary(d1)
+                self.server.recibe_video(dl)
 
     def terminarLlamada(self):
         """ **************************************************
