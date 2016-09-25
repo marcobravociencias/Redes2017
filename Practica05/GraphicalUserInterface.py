@@ -7,30 +7,39 @@
 # Vilchis Dominguez Miguel Alonso                    #
 #       <mvilchis@ciencias.unam.mx>                  #
 #                                                    #
-# Notes: El alumno tiene que implementar la parte    #
-#       comentada como TODO(Instalar python-qt)      #
+# Notes: El alumno tiene que implementar los métodos #
+#       Listados(Instalar python-qt4, python-pyaudio)#
+#      sudo apt-get install jackd qjackctl           #
 #                                                    #
 # Copyright   16-08-2015                             #
 #                                                    #
 # Distributed under terms of the MIT license.        #
 #################################################### #
-import sys
-import getopt
-sys.path.insert(0, './Channel')
-sys.path.insert(0, './GUI')
-sys.path.insert(0, './Constants')
-from Login import *
-from ApiServer import *
-from ApiClient import *
+import sys, getopt
+sys.path.insert(0, 'GUI')
+from LoginWindow import *
 
 
-def main(args):
-    # **************************************************
-    #  Definicion de la funcion principal
-    #**************************************************
-    global app
-    app = App(args)
-    app.exec_()
+# **************************************************
+#  Definicion de la funcion principal
+#**************************************************
+def main(argv):
+    try:
+        opts, args = getopt.getopt(argv, "l", ["local="])
+    except getopt.GetoptError:
+        print 'Uso con puertos locales:'
+        print 'GraphicalUserInterface -l'
+        print 'Uso entre computadoras dentro de la red'
+        print 'GraphicalUserInterface'
+        sys.exit(2)
+    if opts: #Si el usuario mandó alguna bandera
+        local = True if '-l' in opts[0] else False
+    else:
+        local = False
+    app = QtGui.QApplication(sys.argv)
+    mainWindow = LoginWindow(local=local)
+    sys.exit(app.exec_())
 
-if __name__ == "__main__":
-    main(sys.argv)
+
+if __name__ == '__main__':
+    main(sys.argv[1:])

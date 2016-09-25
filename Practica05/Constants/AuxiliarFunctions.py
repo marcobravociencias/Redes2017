@@ -8,7 +8,6 @@
 # Vilchis Dominguez Miguel Alonso                   #
 #       <mvilchis@ciencias.unam.mx>                 #
 #                                                   #
-# Notes:                                            #
 #                                                   #
 # Copyright   16-08-2015                            #
 #                                                   #
@@ -17,31 +16,29 @@
 import socket
 
 
+"""**************************************************
+Metodo auxiliar que se conecta a internet para
+conocer nuestra ip actual
+**************************************************"""
+
+
 def get_ip_address():
-    """**************************************************
-    Método auxiliar que hace uso de internet para
-    conocer la ip con la que contamos como usuarios
-    **************************************************"""
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     s.connect(("8.8.8.8", 80))
     return "%s" % (s.getsockname()[0])
 
-import threading
+
+""" Funcion que construira el header del mensaje a mandar """
 
 
-class MyThread(threading.Thread):
+def get_message_header(username, ip):
+    return username+':'+ip+':'
 
-    """**************************************************
-    Clase auxiliar que implementa el método stop, para que el hilo se detenga
-    externamente
-    **************************************************"""
 
-    def __init__(self, target):
-        super(MyThread, self).__init__(target=target)
-        self._stop = threading.Event()
+from Constants import *
 
-    def stop(self):
-        self._stop.set()
 
-    def is_stop(self):
-        return self._stop.isSet()
+def split_message_header(message):
+    # El mensaje estara sera: username:ip:texto....
+    message_split = message.split(':')
+    return (message_split[MESSAGE_IP], message_split[MESSAGE_PORT], message_split[2:])

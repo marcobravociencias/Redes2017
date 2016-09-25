@@ -1,99 +1,100 @@
 #! /usr/bin/env python
 # -*- coding: utf-8 -*-
+
+
+#####################################################
+# PURPOSE: Clase que permite mandar un mensaje al   #
+#           contacto                                #
+#                                                   #
+# Vilchis Dominguez Miguel Alonso                   #
+#       <mvilchis@ciencias.unam.mx>                 #
+#                                                   #
+# Notes:                                            #
+#                                                   #
+# Copyright   17-08-2015                            #
+#                                                   #
+# Distributed under terms of the MIT license.       #
+#####################################################
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
+#           Mis bibliotecas
 import sys
-import pyaudio
-import Constants
-import cv2
-import numpy
-import threading
-from cStringIO import StringIO
-from numpy.lib import format
+from AuxiliarFunctions import *
+from Constants import *
 
-# class MyApiServer():
-#    def __init__(self, my_port = None):
-#       pass
+# Restrict to a particular path.
+
+
+class RequestHandler(SimpleXMLRPCRequestHandler):
+    rpc_paths = ('/RPC2',)
+"""**************************************************
+Clase que genera un servidor de la biblioteca xmlrpc
+con el cual el cliente expondra los metodos que ofrece
+**************************************************"""
+
+
+class MyApiServer:
+
+    def __init__(self, Qparent, my_port=None):
+        return True
 
 
 class FunctionWrapper:
 
+    """ **************************************************
+    Constructor de la clase
+    ************************************************** """
+
     def __init__(self):
-        self.buffer = list()
-        self.stream = []
-        self.frames = []
-        self.hiloReproduceVideo = threading.Thread(target=self.reproduceVideo)
-        self.hiloReproduceVideo.setDaemon(True)
-        # self.hiloReproduceVideo.start()
-        self.hiloReproduceAudio = threading.Thread(target=self.reproduceAudio)
-        self.hiloReproduceAudio.setDaemon(True)
-        # self.hiloReproduceAudio.start()
+        # Diccionario que contiene las conversaciones activas
+        # hasta ese momento
+        self.chats_dictionary = {}
+
+    """**************************************************
+    Metodo que sera llamado cuando un contacto quiera establecer
+    conexion con este cliente
+    **************************************************"""
+
+    def new_chat_wrapper(self, contact_ip, contact_port, username):
+        # Un cliente mando a llamar a esta instancia, crea una ventana de
+        # chat para automaticamente
+        return True
+    """ **************************************************
+    Procedimiento que ofrece nuestro servidor, este metodo sera llamado
+    por el cliente con el que estamos hablando, debe de
+    hacer lo necesario para mostrar el texto en nuestra pantalla.
+    ************************************************** """
 
     def sendMessage_wrapper(self, message):
-        """ **************************************************
-        Procedimiento que ofrece nuestro servidor, este método será llamado
-        por el cliente con el que estamos hablando, debe de
-        hacer lo necesario para mostrar el texto en nuestra pantalla.
-        ************************************************** """
-        self.buffer.append(message)
+        # Recuerden que el mensaje, al inicio debe llevar una cadena
+        # que contiene username:ip,  para saber a que conversacion
+        # se refiere
+        message_split = split_message_header(message)
+        contact_ip = message_split[MESSAGE_IP]
+        contact_port = message_split[MESSAGE_PORT]
+        text = message_split[MESSAGE_TEXT]
 
-    def ping(self):
-        """ **************************************************
-        Método que nos indica si el servidor se encuentra en servicio.
-        ************************************************** """
+    """ **************************************************
+    Procedimiento que ofrece nuestro servidor, este metodo sera llamado
+    por el cliente con el que estamos hablando, debe de
+    hacer lo necesario para regresar el texto
+    ************************************************** """
+
+    def echo(self, message):
         return True
+    """ **************************************************
+    Procedimiento que ofrece nuestro servidor, este metodo sera llamado
+    por el cliente con el que estamos hablando, debe de
+    hacer lo necesario para reproducir el audio
+    ************************************************** """
 
-    def vaciaBuffer(self):
-        """ **************************************************
-        Método que nos deja vacío el buffer del servidor donde guarda
-        los mensajes y lo regresa.
-        ************************************************** """
-        buffer = ''
-        for m in self.buffer:
-            buffer += m
-            print buffer
-            self.buffer = list()
-        return buffer
+    def play_audio_wrapper(self, audio):
+        return True
+    """ **************************************************
+    Procedimiento que ofrece nuestro servidor, este metodo sera llamado
+    por el cliente con el que estamos hablando, debe de
+    hacer lo necesario para reproducir el video en la ventana adecuada
+    ************************************************** """
 
-    def recibeAudio(self, audio):
-        """ **************************************************
-        Método que recibe el audio del cliente con el que se conecta el chat.
-        ************************************************** """
-        self.stream.append(audio.data)
-
-    def toArray(self, s):
-        f = StringIO(s)
-        arr = format.read_array(f)
-        return arr
-
-    def recibeVideo(self, video):
-        # print 's: recibo frame'
-        self.frames.append(self.toArray(video.data))
-        cv2.imshow('Servidor',self.frames.pop(0))
-        # if len(self.frames) > 0:
-        #     cv2.imshow('Servidor',self.frames.pop(0))
-        # cv2.destroyAllWindows()
-
-    def reproduceAudio(self):
-        CHUNK = Constants.CHUNK
-        CHANNELS = Constants.CHANNELS
-        RATE = Constants.RATE
-        RECORD_SECONDS = Constants.RECORD_SECONDS
-        DELAY_SIZE = Constants.DELAY_SIZE
-        p = pyaudio.PyAudio()
-        FORMAT = p.get_format_from_width(Constants.CHANNELS)
-        while True:
-            stream = p.open(format=FORMAT, channels=CHANNELS, rate=RATE, output=True, frames_per_buffer=CHUNK)
-            if len(self.stream) > 0:
-                data = self.stream.pop(0)
-                stream.write(data)
-            stream.close()
-        p.terminate()
-
-    def reproduceVideo(self):
-        while True:
-            if len(self.frames) > 0:
-                cv2.imshow('Servidor', self.frames.pop(0))
-                # if cv2.waitKey(1) & 0xFF==ord('q'):
-                #     break
-        cv2.destroyAllWindows()
+    def play_video_wrapper(self, frame):
+        return True

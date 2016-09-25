@@ -2,12 +2,42 @@
 # -*- coding: utf-8 -*-
 
 
-class DirectoryChannel():
+#####################################################
+# PURPOSE: Clase que representa la abstracción de   #
+#         Un canal bidireccional (con el servido de #
+#         ubicacion), haciendo  uso de la biblioteca#
+#         xmlRpc                                    #
+#                                                   #
+# Vilchis Dominguez Miguel Alonso                   #
+#       <mvilchis@ciencias.unam.mx>                 #
+#                                                   #
+# Notes:                                            #
+#                                                   #
+# Copyright   16-08-2015                            #
+#                                                   #
+# Distributed under terms of the MIT license.       #
+#####################################################
 
-    """
-    Comunicación entre un cliente y el direcrio de ubicación (internamente
-    BidirectionalChannel donde el ApiClient se dirige hacia el servidor de contactos).
-    """
+from ApiServer import *
+from Channels import *
+from Constants import CHAT_PORT
+from AuxiliarFunctions import *
 
-    def __init__(self, arg):
-        self.arg = arg
+class DirectoryChannel(BidirectionalChannel):
+    def __init__ (self,Qpartent,directory_ip = None, my_port = None, directory_port = None, username = None):
+        #TODO
+    """**************************************************
+    Metodo que se encarga de obtener lista de contactos
+    **************************************************"""
+    def get_contacts(self):
+        #TODO
+    """**************************************************
+    Metodo que se encarga de  conectar al contacto
+    **************************************************"""
+    def connect(self):
+        #TODO
+    """**************************************************
+    Metodo que se encarga de  conectar al contacto
+    **************************************************"""
+    def disconnect(self):
+        #TODO
