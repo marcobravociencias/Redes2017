@@ -8,7 +8,8 @@ class RequestChannel():
 
     """
     Contiene los métodos necesarios para hacer uso de los métodos de un
-    contacto (ApiClient)
+    contacto (internamente ApiClient).
+    Se crea una instancia cada vez que Bob quiere hablar con Alice.
     """
 
     def __init__(self, arg):
@@ -16,7 +17,7 @@ class RequestChannel():
 
 class BidirectionalChannel():
 	"""
-	Canala de comunicación bidireccional (ApiServer + ApiClient)
+	Canal de comunicación bidireccional (internamente ApiServer + ApiClient).
 	"""
 	def __init__(self, arg):
 		self.arg = arg
