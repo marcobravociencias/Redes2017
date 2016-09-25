@@ -16,8 +16,9 @@ class MyApiClient:
 
     def __init__(self, contact_ip=None, contact_port=None):
         if contact_port:
-            return True
+            contact_ip = get_ip_address()
+            self.server = xmlrpclib.ServerProxy("http://" + contact_ip + ":" + contact_port, allow_none= True)
         elif contact_ip:
-            return True
+            self.server = xmlrpclib.ServerProxy("http://"+self.ip+":"+Constants.PORT, allow_none=True)
         else:
             raise ValueError('The values of fields are not consistent MyApiClient.__init__')
