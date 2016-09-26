@@ -7,31 +7,34 @@ from Mensaje import *
 import sys
 import pyaudio
 
+
 class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)
 
+
 class ServidorChat:
+
     """
     Clase que define el servidor de un chat el cual recibe texto y audio
     """
-    
+
     def __init__(self):
         self.mensajes = list()
         self.stream = None
-    
+
     def ping(self):
         """
         Metodo que sirve para saber si el servidor esta activo
         """
         return True
-    
-    def recibe_mensaje(self,mensaje):
+
+    def recibe_mensaje(self, mensaje):
         """
         Metodo que agrega a una lista el mensaje que le pasan
         """
         print "servidor recibe mensaje: "+str(mensaje)
         self.mensajes.append(mensaje)
-    
+
     def sin_leer(self):
         """
         Metodo que enlista los mensajes que aun no han sido leidos, los agrega a una lista para luego 
@@ -44,8 +47,8 @@ class ServidorChat:
                 no_leidos.append(m)
                 m['leido'] = True
         return no_leidos
-        
-    def recibe_audio(self,audio):
+
+    def recibe_audio(self, audio):
         """
         Crea un objeto de tipo pyaudio con los parametros establecidos y reproduce en un stream que crea localmente con el
         parametro audio que recibe
@@ -53,15 +56,15 @@ class ServidorChat:
         CHUNK = 1024
         CHANNELS = 2
         RATE = 44100
-        DELAY_SECONDS = 5 
+        DELAY_SECONDS = 5
         DELAY_SIZE = DELAY_SECONDS * RATE / (1000 * CHUNK)
         p = pyaudio.PyAudio()
         FORMAT = p.get_format_from_width(2)
         stream = p.open(format=FORMAT,
-                    channels=CHANNELS,
-                    rate=RATE,
-                    output=True,
-                    frames_per_buffer=CHUNK)
+                        channels=CHANNELS,
+                        rate=RATE,
+                        output=True,
+                        frames_per_buffer=CHUNK)
         data = audio.data
         stream.write(data)
         stream.close()

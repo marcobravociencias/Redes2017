@@ -7,15 +7,19 @@ from Mensaje import *
 import sys
 import getopt
 
+
 class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)
 
+
 class ServidorContactos:
+
     """
     Servidor que mantiene una lista de usuarios conectados en la red
     """
+
     def __init__(self):
-        #lista de tuplas (alias, ip)
+        # lista de tuplas (alias, ip)
         self.contactos = list()
 
     def ping(self):
@@ -24,7 +28,7 @@ class ServidorContactos:
         """
         return True
 
-    def login(self,contacto):
+    def login(self, contacto):
         """
         Agrega un contacto a la lista de contactos disponibles
         """
@@ -34,7 +38,7 @@ class ServidorContactos:
             self.contactos.append(contacto)
             return self.contactos
 
-    def logout(self,contacto):
+    def logout(self, contacto):
         """
         Quita un contacto a la lista de contactos disponibles
         """
@@ -46,6 +50,7 @@ class ServidorContactos:
         """
         return self.contactos
 
+
 def main():
     # parseo de los argumentos de la línea de comandos
     try:
@@ -53,9 +58,9 @@ def main():
     except getopt.error, msg:
         print msg
         sys.exit(2)
-    ip = args[0] # obtenemos la ip del servidor de contactos con el primer argumento
+    ip = args[0]  # obtenemos la ip del servidor de contactos con el primer argumento
     # iniciamos el servidor de contactos con la ip obtenida en el puerto 8001
-    server = SimpleXMLRPCServer((ip, 8001),requestHandler=RequestHandler,allow_none=True)
+    server = SimpleXMLRPCServer((ip, 8001), requestHandler=RequestHandler, allow_none=True)
     server.register_introspection_functions()
     server.register_instance(ServidorContactos())
     try:
