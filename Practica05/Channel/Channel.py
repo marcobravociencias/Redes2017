@@ -20,6 +20,8 @@
 from ApiServer import *
 from ApiClient import *
 from RecordAudio import record_audio_queue
+import multiprocessing as multip
+
 """**************************************************
 Las instancias de esta clase contendran los metodos
 necesarios para hacer uso de los metodos
@@ -51,9 +53,9 @@ class RequestChannel():
 
     def __init__(self, contact_ip=None, contact_port=None):
         if contact_port:
-            self.api_client = ApiClient(None, contact_port)
+            self.api_client = MyApiClient(None, contact_port)
         elif contact_ip:
-            self.api_client = ApiClient(contact_ip)
+            self.api_client = MyApiClient(contact_ip)
         else:
             raise ValueError('The values of fields are not consistent RequestChannel.__init__')
 
@@ -66,13 +68,13 @@ class RequestChannel():
         return self.api_client.send_text(text)
     """**************************************************
     Metodo que se encarga de mandar iniciar una conversacion
-    con un nuevo contacto 
+    con un nuevo contacto
     **************************************************"""
 
     def new_connection(self, my_ip, my_port, my_username):
         return self.api_client.start_chat(my_ip, my_port, my_username)
     """**************************************************
-    Metodo que se encarga de mandar audio y video al contacto 
+    Metodo que se encarga de mandar audio y video al contacto
     con el cual se estableció la conexion
     **************************************************"""
 
@@ -91,12 +93,17 @@ class BidirectionalChannel(RequestChannel):
     def __init__(self, Qparent, contact_ip=None,  contact_port=None, my_port=None):
         if my_port and contact_port:
             # El objeto api server necesita correr en un hilo aparte
-            return True
+            super(BidirectionalChannel, self).__init__(get_ip_address(), contact_port)
         elif contact_ip:
-            return True
+            super(BidirectionalChannel, self).__init__(contact_ip, contact_port)
+            super(ClassName, self).__init__()
         else:
             raise ValueError('The values of fields are not consistent BidirectionalChannel.__init__')
-        return True
+        self.api_server = MyApiServer(None, my_port)
+        self.api_server_thread = multip.Process(target=self.server.run, name='api_server_thread')
+
+    def serve(self):
+        self.api_server_thread.start()
     """**************************************************
     Metodos Get
     **************************************************"""
