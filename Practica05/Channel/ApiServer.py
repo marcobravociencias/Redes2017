@@ -37,7 +37,16 @@ con el cual el cliente expondra los metodos que ofrece
 class MyApiServer:
 
     def __init__(self, Qparent, my_port=None):
-        return True
+        self.my_port = my_port
+        self.my_ip = get_ip_address()
+        self.function_wrapper = FunctionWrapper()
+        self.server = SimpleXMLRPCServer((self.my_ip, self.my_port, requestHandler=RequestHandler, allow_none=True)
+        self.server.register_introspection_functions()
+        self.server.register_instance(self.function_wrapper)
+
+    def run(self):
+        print 'serving at ' + self.my_ip + ':' + self.my_port + '...'
+        self.server.serve_forever()
 
 
 class FunctionWrapper:
@@ -49,9 +58,9 @@ class FunctionWrapper:
     def __init__(self):
         # Diccionario que contiene las conversaciones activas
         # hasta ese momento
-        self.chats_dictionary = {}
-        self.unread_messages = list()
-        self.read_messages = list()
+        self.chats_dictionary={}
+        self.unread_messages=list()
+        self.read_messages=list()
 
     """**************************************************
     Metodo que sera llamado cuando un contacto quiera establecer
@@ -70,7 +79,7 @@ class FunctionWrapper:
 
     def sendMessage_wrapper(self, message):
         print "servidor recibe mensaje: " + str(message)
-        wrapped_message = Message(message['author_username'], message['author_ip'], message['content'], message['date'])
+        wrapped_message=Message(message['author_username'], message['author_ip'], message['content'], message['date'])
         print "servidor empaqueta mensaje: " + str(wrapped_message)
         self.unread_messages.append(wrapped_message)
 
