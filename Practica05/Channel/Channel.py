@@ -50,21 +50,27 @@ class RequestChannel():
     **************************************************"""
 
     def __init__(self, contact_ip=None, contact_port=None):
-        return True
+        if contact_port:
+            self.api_client = ApiClient(None, contact_port)
+        elif contact_ip:
+            self.api_client = ApiClient(contact_ip)
+        else:
+            raise ValueError('The values of fields are not consistent RequestChannel.__init__')
+
     """**************************************************
     Metodo que se encarga de mandar texto al contacto con
     el cual se estableció la conexion
     **************************************************"""
 
     def send_text(self, text):
-        return True
+        return self.api_client.send_text(text)
     """**************************************************
     Metodo que se encarga de mandar iniciar una conversacion
     con un nuevo contacto 
     **************************************************"""
 
-    def new_connection(self, my_ip, my_port):
-        return True
+    def new_connection(self, my_ip, my_port, my_username):
+        return self.api_client.start_chat(my_ip, my_port, my_username)
     """**************************************************
     Metodo que se encarga de mandar audio y video al contacto 
     con el cual se estableció la conexion
