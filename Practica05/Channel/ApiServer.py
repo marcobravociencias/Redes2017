@@ -21,6 +21,7 @@ from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 import sys
 from AuxiliarFunctions import *
 from Constants import *
+from Message import *
 
 # Restrict to a particular path.
 
@@ -49,6 +50,8 @@ class FunctionWrapper:
         # Diccionario que contiene las conversaciones activas
         # hasta ese momento
         self.chats_dictionary = {}
+        self.unread_messages = list()
+        self.read_messages = list()
 
     """**************************************************
     Metodo que sera llamado cuando un contacto quiera establecer
@@ -66,13 +69,10 @@ class FunctionWrapper:
     ************************************************** """
 
     def sendMessage_wrapper(self, message):
-        # Recuerden que el mensaje, al inicio debe llevar una cadena
-        # que contiene username:ip,  para saber a que conversacion
-        # se refiere
-        message_split = split_message_header(message)
-        contact_ip = message_split[MESSAGE_IP]
-        contact_port = message_split[MESSAGE_PORT]
-        text = message_split[MESSAGE_TEXT]
+        print "servidor recibe mensaje: " + str(message)
+        wrapped_message = Message(message['author_username'], message['author_ip'], message['content'], message['date'])
+        print "servidor empaqueta mensaje: " + str(wrapped_message)
+        self.unread_messages.append(wrapped_message)
 
     """ **************************************************
     Procedimiento que ofrece nuestro servidor, este metodo sera llamado

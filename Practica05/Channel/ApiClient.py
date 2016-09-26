@@ -5,6 +5,7 @@ import sys
 sys.path.insert(0, '../Constants')
 from Constants import CHAT_PORT
 from AuxiliarFunctions import *
+from Message import *
 
 """**************************************************
 Clase que genera un proxy para poder hacer uso de
