@@ -22,7 +22,6 @@ class Chat(QtGui.QMainWindow, chat_class):
         QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self)
         self.ip_remoto = ip_remoto
-        #self.servidor_remoto = xmlrpclib.ServerProxy("http://"+self.ip_remoto+":8000",allow_none=True)
 
     def texto_actual(self):
         """

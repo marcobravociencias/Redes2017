@@ -6,6 +6,7 @@ from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 from Mensaje import *
 import sys
 import pyaudio
+import Constants
 
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
@@ -53,13 +54,14 @@ class ServidorChat:
         Crea un objeto de tipo pyaudio con los parametros establecidos y reproduce en un stream que crea localmente con el
         parametro audio que recibe
         """
-        CHUNK = 1024
-        CHANNELS = 2
-        RATE = 44100
-        DELAY_SECONDS = 5
-        DELAY_SIZE = DELAY_SECONDS * RATE / (1000 * CHUNK)
+        CHUNK = Constants.CHUNK
+        WIDTH = Constants.WIDTH
+        CHANNELS = Constants.CHANNELS
+        RATE = Constants.RATE
+        DELAY_SECONDS = Constants.RECORD_SECONDS
+        DELAY_SIZE = Constants.DELAY_SIZE
         p = pyaudio.PyAudio()
-        FORMAT = p.get_format_from_width(2)
+        FORMAT = p.get_format_from_width(WIDTH)
         stream = p.open(format=FORMAT,
                         channels=CHANNELS,
                         rate=RATE,

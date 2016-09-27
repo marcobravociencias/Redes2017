@@ -6,6 +6,7 @@ from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 from Mensaje import *
 import sys
 import getopt
+import Constants
 
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
@@ -59,8 +60,8 @@ def main():
         print msg
         sys.exit(2)
     ip = args[0]  # obtenemos la ip del servidor de contactos con el primer argumento
-    # iniciamos el servidor de contactos con la ip obtenida en el puerto 8001
-    server = SimpleXMLRPCServer((ip, 8001), requestHandler=RequestHandler, allow_none=True)
+    # iniciamos el servidor de contactos con la ip obtenida en el puerto DIRECTORY_PORT
+    server = SimpleXMLRPCServer((ip, Constants.DIRECTORY_PORT), requestHandler=RequestHandler, allow_none=True)
     server.register_introspection_functions()
     server.register_instance(ServidorContactos())
     try:

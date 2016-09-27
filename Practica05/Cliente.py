@@ -7,6 +7,7 @@ import time
 import threading
 import pyaudio
 import numpy
+import Constants
 from Mensaje import *
 from Chat import *
 from InterfazLlamada import *
@@ -36,7 +37,7 @@ class Cliente(object):
         self.ip_contactos = ip_contactos
 
         # inicializamos un proxy que se comunique con el servidor de contactos
-        self.servidor_contactos = xmlrpclib.ServerProxy("http://"+self.ip_contactos+":8001", allow_none=True)
+        self.servidor_contactos = xmlrpclib.ServerProxy("http://"+self.ip_contactos+":" + str(Constants.DIRECTORY_PORT), allow_none=True)
         self.servidor_contactos.login([self.nick, self.ip_local])
 
         # Inicializamos la interfaz de lista de contactos
@@ -70,13 +71,13 @@ class Cliente(object):
         disponibles
         """
         self.contactos.lista.clear()
-        listita = self.servidor_contactos.disponibles()
-        self.contactos.lista.setRowCount(len(listita))
+        lista_disp = self.servidor_contactos.disponibles()
+        self.contactos.lista.setRowCount(len(lista_disp))
         self.contactos.lista.setColumnCount(2)
         header = (QStringList() << 'Usuario' << 'Dirección Ip')
         self.contactos.lista.setHorizontalHeaderLabels(header)
         i = 0
-        for contacto in listita:
+        for contacto in lista_disp:
             self.contactos.lista.setItem(i, 0, QtGui.QTableWidgetItem(contacto[0]))
             self.contactos.lista.setItem(i, 1, QtGui.QTableWidgetItem(contacto[1]))
             i = i+1
@@ -120,10 +121,10 @@ class Cliente(object):
         Verifica constantemente los mensajes que han llegado al servidor local
         y que no han sido leídos, después los dibuja en la interfaz gráfica
         """
-        servidor_local = xmlrpclib.ServerProxy("http://"+self.ip_local+":8000", allow_none=True)
+        servidor_local = xmlrpclib.ServerProxy("http://"+self.ip_local+":" + str(Constants.CONTACT_PORT), allow_none=True)
         while True:
             # espera 1 segundo
-            time.sleep(1)
+            time.sleep(Constants.SLEEP_TIME)
             # le pide al servidor los mensajes nuevos
             sin_leer = servidor_local.sin_leer()
             # los dibuja en la interfaz gráfica
@@ -160,7 +161,7 @@ class Cliente(object):
                 # construye el mensaje a partir del texto que hay en el chat correspondiente
                 mensaje = Mensaje(self.nick, chat.texto_actual(), self.ip_local)
                 # envía el mensaje al servidor remoto
-                servidor_remoto = xmlrpclib.ServerProxy("http://"+ip+":8000", allow_none=True)
+                servidor_remoto = xmlrpclib.ServerProxy("http://"+ip+":" + str(Constants.CONTACT_PORT), allow_none=True)
                 servidor_remoto.recibe_mensaje(mensaje)
                 # dibuja el mensaje en la ventana de chat correspondiente
                 chat.ponTexto(mensaje.fecha, mensaje.autor, mensaje.texto)
@@ -182,7 +183,7 @@ class Cliente(object):
         self.interfaz_llamada.show()
 
         # utilizamos una cola para almacenar datos de audio
-        self.cola = mp.Queue(10000)
+        self.cola = mp.Queue(Constants.QUEUE_SIZE)
 
         # hilo que captura el audio local y lo mete en la cola
         #self.hilo_escucha = threading.Thread(target=self.escucha,name='hilo_escucha')
@@ -198,10 +199,10 @@ class Cliente(object):
         Permanece en escucha permanente del audio local y mete los datos en la cola
         """
         # parámetros del stream de entrada
-        CHUNK = 1024
-        WIDTH = 2
-        CHANNELS = 2
-        RATE = 44100
+        CHUNK = Constants.CHUNK
+        WIDTH = Constants.WIDTH
+        CHANNELS = Constants.CHANNELS
+        RATE = Constants.RATE
         p = pyaudio.PyAudio()
         FORMAT = p.get_format_from_width(WIDTH)
 
@@ -214,7 +215,7 @@ class Cliente(object):
                 return 1
 
             # tamaño del buffer que almacena datos de audio
-            n = 30
+            n = Constants.BUFFER_SIZE
             # arreglo para almacenar el buffer
             frame = []
 

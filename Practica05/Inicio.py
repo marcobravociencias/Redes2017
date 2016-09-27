@@ -10,6 +10,7 @@ from Cliente import *
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 from Servidor import *
+import Constants
 
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
@@ -52,7 +53,7 @@ class Inicio(QtGui.QMainWindow, inicio_class):
         """
         ip_local = ip
         print ip_local
-        server = SimpleXMLRPCServer((ip_local, 8000), requestHandler=RequestHandler, allow_none=True)
+        server = SimpleXMLRPCServer((ip_local, Constants.CONTACT_PORT), requestHandler=RequestHandler, allow_none=True)
         server.register_introspection_functions()
         server.register_instance(ServidorChat())
         try:
