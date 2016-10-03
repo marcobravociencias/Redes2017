@@ -11,6 +11,7 @@ import xmlrpclib
 import threading
 import errno
 from socket import error as socket_error
+from AuxiliarFunctions import Autentica
 
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
@@ -53,7 +54,10 @@ class ServidorContactos:
         return True
 
     def usuario_valido(self, contacto):
-        return True
+        usr = contacto[0]
+        pas = contacto[-1]
+        a = Autentica(usr, pas)
+        return a.login()
 
     def login(self, contacto):
         """
