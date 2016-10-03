@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>302</width>
-    <height>229</height>
+    <height>267</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,13 +18,13 @@
     <property name="geometry">
      <rect>
       <x>180</x>
-      <y>140</y>
+      <y>190</y>
       <width>85</width>
       <height>26</height>
      </rect>
     </property>
     <property name="text">
-     <string>OK</string>
+     <string>Ingresar</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="local">
@@ -70,7 +70,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>ip contacto</string>
+     <string>Ip contactos</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="nombre">
@@ -96,6 +96,48 @@
      <string>Nombre de Usuario</string>
     </property>
    </widget>
+   <widget class="QLineEdit" name="contrasenia">
+    <property name="geometry">
+     <rect>
+      <x>170</x>
+      <y>130</y>
+      <width>113</width>
+      <height>28</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="echoMode">
+     <enum>QLineEdit::Password</enum>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>140</y>
+      <width>121</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Contraseña</string>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>40</x>
+      <y>190</y>
+      <width>92</width>
+      <height>27</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Registro</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -103,7 +145,7 @@
      <x>0</x>
      <y>0</y>
      <width>302</width>
-     <height>19</height>
+     <height>24</height>
     </rect>
    </property>
   </widget>

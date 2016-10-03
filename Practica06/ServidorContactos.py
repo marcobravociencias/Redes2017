@@ -52,6 +52,9 @@ class ServidorContactos:
         """
         return True
 
+    def usuario_valido(self, contacto):
+        return True
+
     def login(self, contacto):
         """
         Agrega un contacto a la lista de contactos disponibles
@@ -59,8 +62,13 @@ class ServidorContactos:
         if contacto in self.contactos:
             return None
         else:
-            self.contactos.append(contacto)
-            return self.contactos
+            if self.usuario_valido(contacto):
+                print 'usuario ' + str(contacto) + ' valido'
+                self.contactos.append(contacto)
+                return self.contactos
+            else:
+                print 'usuario ' + str(contacto) + ' invalido'
+                return None
 
     def logout(self, contacto):
         """

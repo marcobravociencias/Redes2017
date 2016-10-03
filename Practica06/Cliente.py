@@ -23,7 +23,7 @@ class Cliente(object):
     los servidores
     """
 
-    def __init__(self, nick, ip_local, ip_contactos):
+    def __init__(self, nick, pwd, ip_local, ip_contactos):
         """
         nick: apodo del usuario de este cliente
         ip_local: dirección ip del equipo que ejecuta este cliente
@@ -33,12 +33,13 @@ class Cliente(object):
 
         # asignaciones a atributos a partir de los parámetros
         self.nick = nick
+        self.pwd = pwd
         self.ip_local = ip_local
         self.ip_contactos = ip_contactos
 
         # inicializamos un proxy que se comunique con el servidor de contactos
         self.servidor_contactos = xmlrpclib.ServerProxy("http://"+self.ip_contactos+":" + str(Constants.DIRECTORY_PORT), allow_none=True)
-        self.servidor_contactos.login([self.nick, self.ip_local])
+        self.servidor_contactos.login([self.nick, self.ip_local, self.pwd])
 
         # Inicializamos la interfaz de lista de contactos
         self.contactos_ui()

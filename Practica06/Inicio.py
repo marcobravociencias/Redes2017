@@ -43,9 +43,10 @@ class Inicio(QtGui.QMainWindow, inicio_class):
         local = str(self.local.text())
         contactos = str(self.contactos.text())
         nombre = str(self.nombre.text())
+        pwd = str(self.contrasenia.text())
         self.hilo_servidor = threading.Thread(target=self.correServidor, args=(local,), name='hilo_servidor')
         self.hilo_servidor.start()
-        self.clientesito = Cliente(nombre, local, contactos)
+        self.clientesito = Cliente(nombre, pwd, local, contactos)
 
     def correServidor(self, ip):
         """
