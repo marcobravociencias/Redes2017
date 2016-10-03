@@ -58,8 +58,10 @@ class Cliente(object):
         # Iniciamos una ventana de lista de conctactos
         self.contactos = Contactos()
         # da click en 'Actualiza' y se actualiza la lista de contactos conectados
-        self.contactos.actualiza.clicked.connect(self.actualiza_lista)
+        # self.contactos.actualiza.clicked.connect(self.actualiza_lista)
         # da click en 'Conectar' y se inicia un nuevo chat
+        self.hilo_actualiza_lista = threading.Thread(target=self.actualiza_lista, name='hilo_actualiza_lista')
+        self.hilo_actualiza_lista.start()
         self.contactos.inicia_chat.clicked.connect(self.inicia_chat)
         # da click en 'Desconectar' y se desconecta del chat
         self.contactos.desconecta.clicked.connect(self.desconectarse)
@@ -70,17 +72,19 @@ class Cliente(object):
         Hace una petición al servidor de contactos para actualizar la lista de contactos
         disponibles
         """
-        self.contactos.lista.clear()
-        lista_disp = self.servidor_contactos.disponibles()
-        self.contactos.lista.setRowCount(len(lista_disp))
-        self.contactos.lista.setColumnCount(2)
-        header = (QStringList() << 'Usuario' << 'Dirección Ip')
-        self.contactos.lista.setHorizontalHeaderLabels(header)
-        i = 0
-        for contacto in lista_disp:
-            self.contactos.lista.setItem(i, 0, QtGui.QTableWidgetItem(contacto[0]))
-            self.contactos.lista.setItem(i, 1, QtGui.QTableWidgetItem(contacto[1]))
-            i = i+1
+        while True:
+            time.sleep(5)
+            self.contactos.lista.clear()
+            listita = self.servidor_contactos.disponibles()
+            self.contactos.lista.setRowCount(len(listita))
+            self.contactos.lista.setColumnCount(2)
+            header = (QStringList() << 'Usuario' << 'Dirección Ip')
+            self.contactos.lista.setHorizontalHeaderLabels(header)
+            i = 0
+            for contacto in listita:
+                self.contactos.lista.setItem(i, 0, QtGui.QTableWidgetItem(contacto[0]))
+                self.contactos.lista.setItem(i, 1, QtGui.QTableWidgetItem(contacto[1]))
+                i = i+1
 
     def inicia_chat(self):
         """

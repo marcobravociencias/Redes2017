@@ -7,6 +7,10 @@ from Mensaje import *
 import sys
 import getopt
 import Constants
+import xmlrpclib
+import threading
+import errno
+from socket import error as socket_error
 
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
@@ -22,6 +26,25 @@ class ServidorContactos:
     def __init__(self):
         # lista de tuplas (alias, ip)
         self.contactos = list()
+        # hilo que hace ping a los que hayan hecho login y no han hecho logout
+        # para tener actualizada la lista de contactos conectados
+        self.hilo_pings = threading.Thread(target=self.pinguea, name='hilo_pings')
+        self.hilo_pings.start()
+
+    def pinguea(self):
+        while(True):
+            # espera 5 segundos
+            time.sleep(5)
+            for c in self.contactos:
+                ip = c[1]
+                print ip
+                try:
+                    s = xmlrpclib.ServerProxy('http://' + ip + ':' + str(Constants.CONTACT_PORT))
+                    s.ping()
+                except socket_error as err:
+                    self.logout(c)
+                    print err
+                    print "el servidor " + ip + " no responde, se ha desconectado"
 
     def ping(self):
         """
@@ -41,9 +64,12 @@ class ServidorContactos:
 
     def logout(self, contacto):
         """
-        Quita un contacto a la lista de contactos disponibles
+        Quita un contacto de la lista de contactos disponibles
         """
-        self.contactos.remove(contacto)
+        if contacto in self.contactos:
+            self.contactos.remove(contacto)
+        else:
+            return None
 
     def disponibles(self):
         """
