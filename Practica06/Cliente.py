@@ -13,6 +13,7 @@ from Chat import *
 from InterfazLlamada import *
 from ThreadParable import *
 from Contactos import *
+from MensajeUI import *
 from functools import partial
 
 
@@ -39,18 +40,18 @@ class Cliente(object):
 
         # inicializamos un proxy que se comunique con el servidor de contactos
         self.servidor_contactos = xmlrpclib.ServerProxy("http://"+self.ip_contactos+":" + str(Constants.DIRECTORY_PORT), allow_none=True)
-        self.servidor_contactos.login([self.nick, self.ip_local, self.pwd])
-
-        # Inicializamos la interfaz de lista de contactos
-        self.contactos_ui()
-
-        # iniciamos un hilo que monitorea los mensajes que han sido enviados al servidor local
-        # y los dibuja en la interfaz gráfica correspondiente a cada conversación
-        self.hilo_mensajes_recibidos = threading.Thread(target=self.espera_mensaje_remoto,  name='hilo_mensajes_recibidos')
-        self.hilo_mensajes_recibidos.start()
-
-        # lista de interfaces de chat, una por cada conversación
-        self.lista_chats = list()
+        login = self.servidor_contactos.login([self.nick, self.ip_local, self.pwd])
+        if login != Constants.USUARIO_INVALIDO:
+            # Inicializamos la interfaz de lista de contactos
+            self.contactos_ui()
+            # iniciamos un hilo que monitorea los mensajes que han sido enviados al servidor local
+            # y los dibuja en la interfaz gráfica correspondiente a cada conversación
+            self.hilo_mensajes_recibidos = threading.Thread(target=self.espera_mensaje_remoto,  name='hilo_mensajes_recibidos')
+            self.hilo_mensajes_recibidos.start()
+            # lista de interfaces de chat, una por cada conversación
+            self.lista_chats = list()
+        else:
+            self.usuario_invalido_ui()
 
     def contactos_ui(self):
         """
@@ -67,6 +68,11 @@ class Cliente(object):
         # da click en 'Desconectar' y se desconecta del chat
         self.contactos.desconecta.clicked.connect(self.desconectarse)
         self.contactos.show()
+
+    def usuario_invalido_ui(self):
+        self.mensaje = MensajeUI('Usuario invalido')
+        # self.mensaje.despliega('Usuario invalido')
+        self.mensaje.show()
 
     def actualiza_lista(self):
         """

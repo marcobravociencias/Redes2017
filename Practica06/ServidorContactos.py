@@ -64,7 +64,7 @@ class ServidorContactos:
         Agrega un contacto a la lista de contactos disponibles
         """
         if contacto in self.contactos:
-            return None
+            return Constants.LOGUEADO
         else:
             if self.usuario_valido(contacto):
                 print 'usuario ' + str(contacto) + ' valido'
@@ -72,7 +72,7 @@ class ServidorContactos:
                 return self.contactos
             else:
                 print 'usuario ' + str(contacto) + ' invalido'
-                return None
+                return Constants.USUARIO_INVALIDO
 
     def logout(self, contacto):
         """
