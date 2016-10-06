@@ -10,6 +10,7 @@ from Cliente import *
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 from Servidor import *
+from UsuarioNuevoGUI import Nuevo
 import Constants
 
 
@@ -31,7 +32,8 @@ class Inicio(QtGui.QMainWindow, inicio_class):
         """
         QtGui.QMainWindow.__init__(self, parent)
         self.setupUi(self)
-        self.ok.clicked.connect(self.verifica)  # Hace la conexión del boton "ok" con el metodo verifica
+        self.ok.clicked.connect(self.verifica)  # Hace la conexión del boton "ingresar" con el metodo verifica
+        self.registro.clicked.connect(self.agrega_usuario)  # Hace la conexión del boton "registro" con el metodo agrega_usuario
         self.clientesito = None
 
     def verifica(self):
@@ -47,6 +49,11 @@ class Inicio(QtGui.QMainWindow, inicio_class):
         self.hilo_servidor = threading.Thread(target=self.correServidor, args=(local,), name='hilo_servidor')
         self.hilo_servidor.start()
         self.clientesito = Cliente(nombre, pwd, local, contactos)
+
+    def agrega_usuario(self):
+        self.wind = Nuevo()
+        self.wind.show()
+        self.hide()
 
     def correServidor(self, ip):
         """

@@ -5,3 +5,4 @@ username : prueba password : uwzjgf
 username : agregado password : flwjlfit
 username : Admin password : firns
 username : Juan password : ozfs
+username : jaime password : ofnrj

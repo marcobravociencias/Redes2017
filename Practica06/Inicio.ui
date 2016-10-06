@@ -125,7 +125,7 @@
      <string>Contraseña</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="registro">
     <property name="geometry">
      <rect>
       <x>40</x>
