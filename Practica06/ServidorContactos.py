@@ -89,6 +89,13 @@ class ServidorContactos:
         """
         return self.contactos
 
+    def agrega_usuario(self, usuario, password):
+        regis = Autentica(usuario, password)
+        if regis.registra():
+            return True
+        else:
+            return False
+
 
 def main():
     # parseo de los argumentos de la línea de comandos

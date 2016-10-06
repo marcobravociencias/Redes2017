@@ -51,7 +51,9 @@ class Inicio(QtGui.QMainWindow, inicio_class):
         self.clientesito = Cliente(nombre, pwd, local, contactos)
 
     def agrega_usuario(self):
-        self.wind = Nuevo()
+        contactos = str(self.contactos.text())
+        print 'contactos ' + contactos
+        self.wind = Nuevo(contactos)
         self.wind.show()
         self.hide()
 
