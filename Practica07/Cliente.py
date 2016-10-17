@@ -8,6 +8,7 @@ import threading
 import pyaudio
 import numpy
 import Constants
+import socket
 from Mensaje import *
 from Chat import *
 from InterfazLlamada import *
@@ -39,19 +40,39 @@ class Cliente(object):
         self.ip_contactos = ip_contactos
 
         # inicializamos un proxy que se comunique con el servidor de contactos
-        self.servidor_contactos = xmlrpclib.ServerProxy("http://"+self.ip_contactos+":" + str(Constants.DIRECTORY_PORT), allow_none=True)
-        login = self.servidor_contactos.login([self.nick, self.ip_local, self.pwd])
+        # self.servidor_contactos =
+        # xmlrpclib.ServerProxy("http://"+self.ip_contactos+":" +
+        # str(Constants.DIRECTORY_PORT), allow_none=True)
+        self.servidor_contactos = socket.socket(
+            socket.AF_INET, socket.SOCK_STREAM)
+        self.servidor_contactos.connect(
+            (ip_contactos, Constants.DIRECTORY_PORT))
+        # login = self.servidor_contactos.login([self.nick, self.ip_local,
+        # self.pwd])
+        login = self.inicia_sesion()
         if login != Constants.USUARIO_INVALIDO:
             # Inicializamos la interfaz de lista de contactos
             self.contactos_ui()
             # iniciamos un hilo que monitorea los mensajes que han sido enviados al servidor local
-            # y los dibuja en la interfaz gráfica correspondiente a cada conversación
-            self.hilo_mensajes_recibidos = threading.Thread(target=self.espera_mensaje_remoto,  name='hilo_mensajes_recibidos')
+            # y los dibuja en la interfaz gráfica correspondiente a cada
+            # conversación
+            self.hilo_mensajes_recibidos = threading.Thread(
+                target=self.espera_mensaje_remoto,
+                name='hilo_mensajes_recibidos')
             self.hilo_mensajes_recibidos.start()
             # lista de interfaces de chat, una por cada conversación
             self.lista_chats = list()
         else:
             self.usuario_invalido_ui()
+
+    def inicia_sesion(self):
+        separator = Constants.SEPARATOR
+        self.servidor_contactos.sendall(
+            'LOGIN' + separator + '3' + separator + self.nick +
+            separator + self.ip_local + separator + self.pwd)
+        login = self.servidor_contactos.recv(Constants.SOCK_BUFF_SIZE)
+        # self.servidor_contactos.close()
+        return login
 
     def contactos_ui(self):
         """
@@ -62,7 +83,8 @@ class Cliente(object):
         # da click en 'Actualiza' y se actualiza la lista de contactos conectados
         # self.contactos.actualiza.clicked.connect(self.actualiza_lista)
         # da click en 'Conectar' y se inicia un nuevo chat
-        self.hilo_actualiza_lista = threading.Thread(target=self.actualiza_lista, name='hilo_actualiza_lista')
+        self.hilo_actualiza_lista = threading.Thread(
+            target=self.actualiza_lista, name='hilo_actualiza_lista')
         self.hilo_actualiza_lista.start()
         self.contactos.inicia_chat.clicked.connect(self.inicia_chat)
         # da click en 'Desconectar' y se desconecta del chat
@@ -82,16 +104,32 @@ class Cliente(object):
         while True:
             time.sleep(5)
             self.contactos.lista.clear()
-            listita = self.servidor_contactos.disponibles()
+            # listita = self.servidor_contactos.disponibles()
+            listita = self.contactos_disponibles()
             self.contactos.lista.setRowCount(len(listita))
             self.contactos.lista.setColumnCount(2)
             header = (QStringList() << 'Usuario' << 'Dirección Ip')
             self.contactos.lista.setHorizontalHeaderLabels(header)
             i = 0
             for contacto in listita:
-                self.contactos.lista.setItem(i, 0, QtGui.QTableWidgetItem(contacto[0]))
-                self.contactos.lista.setItem(i, 1, QtGui.QTableWidgetItem(contacto[1]))
+                self.contactos.lista.setItem(
+                    i, 0, QtGui.QTableWidgetItem(contacto[0]))
+                self.contactos.lista.setItem(
+                    i, 1, QtGui.QTableWidgetItem(contacto[1]))
                 i = i+1
+
+    def contactos_disponibles(self):
+        separator = Constants.SEPARATOR
+        self.servidor_contactos.sendall(
+            'DISPONIBLES' + separator + '0')
+        availables = self.servidor_contactos.recv(Constants.SOCK_BUFF_SIZE)
+        # self.servidor_contactos.close()
+        cont_list = []
+        contacts = availables.split(Constants.SEPARATOR)
+        for contact in contacts:
+            cont = contact.split(',')
+            cont_list.append([cont[0], cont[1]])
+        return cont_list
 
     def inicia_chat(self):
         """
@@ -101,8 +139,10 @@ class Cliente(object):
         print "ip_remoto: " + str(ip_remoto)
         nuevo_chat = Chat(ip_remoto)
         # asociamos el botón mandar con la función lambda envia_mensaje y el parámetro
-        # ip correspondiente para que dibuje los mensajes en la ventana de chat apropiada
-        nuevo_chat.mandar.clicked.connect(partial(self.envia_mensaje, ip=ip_remoto))
+        # ip correspondiente para que dibuje los mensajes en la ventana de chat
+        # apropiada
+        nuevo_chat.mandar.clicked.connect(
+            partial(self.envia_mensaje, ip=ip_remoto))
         nuevo_chat.audio.clicked.connect(self.llamada)
         nuevo_chat.show()
         # agregamos la nueva interfaz a la lista de interfaces
@@ -116,8 +156,10 @@ class Cliente(object):
         print "ip_remoto ip: " + str(ip_remoto)
         nuevo_chat = Chat(ip_remoto)
         # asociamos el botón mandar con la función lambda envia_mensaje y el parámetro
-        # ip correspondiente para que dibuje los mensajes en la ventana de chat apropiada
-        nuevo_chat.mandar.clicked.connect(partial(self.envia_mensaje, ip=ip_remoto))
+        # ip correspondiente para que dibuje los mensajes en la ventana de chat
+        # apropiada
+        nuevo_chat.mandar.clicked.connect(
+            partial(self.envia_mensaje, ip=ip_remoto))
         nuevo_chat.audio.clicked.connect(self.llamada)
         nuevo_chat.show()
         # agregamos la nueva interfaz a la lista de interfaces
@@ -132,7 +174,9 @@ class Cliente(object):
         Verifica constantemente los mensajes que han llegado al servidor local
         y que no han sido leídos, después los dibuja en la interfaz gráfica
         """
-        servidor_local = xmlrpclib.ServerProxy("http://"+self.ip_local+":" + str(Constants.CONTACT_PORT), allow_none=True)
+        servidor_local = xmlrpclib.ServerProxy(
+            "http://"+self.ip_local+":" + str(Constants.CONTACT_PORT),
+            allow_none=True)
         while True:
             # espera 1 segundo
             time.sleep(Constants.SLEEP_TIME)
@@ -169,10 +213,14 @@ class Cliente(object):
         # buscamos la ventana de chat desde donde se enviará el mensaje
         for chat in self.lista_chats:
             if chat.ip_remoto == ip:
-                # construye el mensaje a partir del texto que hay en el chat correspondiente
-                mensaje = Mensaje(self.nick, chat.texto_actual(), self.ip_local)
+                # construye el mensaje a partir del texto que hay en el chat
+                # correspondiente
+                mensaje = Mensaje(
+                    self.nick, chat.texto_actual(), self.ip_local)
                 # envía el mensaje al servidor remoto
-                servidor_remoto = xmlrpclib.ServerProxy("http://"+ip+":" + str(Constants.CONTACT_PORT), allow_none=True)
+                servidor_remoto = xmlrpclib.ServerProxy(
+                    "http://"+ip+":" + str(Constants.CONTACT_PORT),
+                    allow_none=True)
                 servidor_remoto.recibe_mensaje(mensaje)
                 # dibuja el mensaje en la ventana de chat correspondiente
                 chat.ponTexto(mensaje.fecha, mensaje.autor, mensaje.texto)
@@ -197,12 +245,16 @@ class Cliente(object):
         self.cola = mp.Queue(Constants.QUEUE_SIZE)
 
         # hilo que captura el audio local y lo mete en la cola
-        #self.hilo_escucha = threading.Thread(target=self.escucha,name='hilo_escucha')
-        self.hilo_escucha = ThreadParable(targetp=self.escucha, namep='hilo_escucha')
+        # self.hilo_escucha =
+        # threading.Thread(target=self.escucha,name='hilo_escucha')
+        self.hilo_escucha = ThreadParable(
+            targetp=self.escucha, namep='hilo_escucha')
         self.hilo_escucha.start()
         # hilo que saca lo que hay en la cola y lo envía al servidor remoto
-        #self.hilo_transmite = threading.Thread(target=self.transmite,name='hilo_transmite')
-        self.hilo_transmite = ThreadParable(targetp=self.transmite, namep='hilo_transmite')
+        # self.hilo_transmite =
+        # threading.Thread(target=self.transmite,name='hilo_transmite')
+        self.hilo_transmite = ThreadParable(
+            targetp=self.transmite, namep='hilo_transmite')
         self.hilo_transmite.start()
 
     def escucha(self):
@@ -218,7 +270,8 @@ class Cliente(object):
         FORMAT = p.get_format_from_width(WIDTH)
 
         # stream que captura el audio
-        stream = p.open(format=FORMAT, channels=CHANNELS, rate=RATE, input=True, frames_per_buffer=CHUNK)
+        stream = p.open(format=FORMAT, channels=CHANNELS,
+                        rate=RATE, input=True, frames_per_buffer=CHUNK)
 
         while True:
             # checamos si el usuario aún no termina la llamada
@@ -234,8 +287,10 @@ class Cliente(object):
             for i in range(0, n):
                 frame.append(stream.read(CHUNK))
 
-            # convertimos la "cadena" frame a datos binarios con el tipo de dato uint8
-            datos_binarios = numpy.fromstring(''.join(frame), dtype=numpy.uint8)
+            # convertimos la "cadena" frame a datos binarios con el tipo de
+            # dato uint8
+            datos_binarios = numpy.fromstring(
+                ''.join(frame), dtype=numpy.uint8)
 
             # verificamos que la cola no esté llena y si lo está sacamos algo
             if self.cola.full():
